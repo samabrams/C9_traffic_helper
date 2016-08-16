@@ -8,7 +8,6 @@ function makeHourDivs() {
 
 // Add call to button
 // function addCallToBtn() {
-//     $('.ajaxCallBtn').click(mapCall);
 // }
 
 // Initialize
@@ -18,16 +17,19 @@ $(document).ready(function () {
 
 });
 
+
 // LFZ Address - 9080 Irvine Center Dr. Irvine
 
 
 function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 13,
-        center: {lat: 34.04924594193164, lng: -118.24104309082031}
+        center: {lat: 33.636193, lng: -117.739393}
     });
 
     var trafficLayer = new google.maps.TrafficLayer();
     console.log(trafficLayer);
     trafficLayer.setMap(map);
 }
+
+
