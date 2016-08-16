@@ -1,0 +1,68 @@
+
+
+body {
+    margin:0;
+    padding: 0;
+    font-family: Roboto, Arial, sans-serif;
+}
+
+.wrapper{
+    height: 100vh;
+    width: 100vw;
+    box-sizing:border-box;
+}
+
+.hourGrid1, .hourGrid2 {
+    height:100vh;
+    width: 20vw;
+    display: inline-block;
+    float:left;
+}
+
+.hourGrid1 {
+    background-color: #43A047;
+    padding: 1vw;
+    box-sizing: border-box;
+}
+
+.hourGrid2{
+    background-color: #0fb8ad;
+}
+
+.hours {
+    height: 4.17vh;
+    line-height: 4.17vh;
+    padding: 0 10px;
+}
+
+.hours:nth-child(even){
+    background: #f0f0f0;
+}
+
+.hours:nth-child(odd){
+    background: #ffffff;
+}
+
+.map {
+    height:100vh;
+    width:60vw;
+    display: inline-block;
+    background-color: #4cae4c;
+    background-image: url(images/mapPlaceholder.png);
+    float: left;
+}
+
+.logo {
+    margin: 1vh 0;
+    font-size: 2em;
+    color: #ffffff;
+}
+
+input {
+    font-size:18px;
+    padding: .7vw 1vw;
+    display:block;
+    width:16vw;
+    border:none;
+    border-bottom:1px solid #757575;
+}
