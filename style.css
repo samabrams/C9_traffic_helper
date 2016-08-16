@@ -43,12 +43,12 @@ body {
     background: #ffffff;
 }
 
-.map {
+#map {
     height:100vh;
     width:60vw;
     display: inline-block;
     background-color: #4cae4c;
-    background-image: url(images/mapPlaceholder.png);
+    /*background-image: url(images/mapPlaceholder.png);*/
     float: left;
 }
 
