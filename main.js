@@ -6,16 +6,7 @@ function makeHourDivs() {
     }
 }
 
-// // Add call to button
-// function getDirections() {
-
-// }
-
-// Initialize
-$(document).ready(function () {
-    makeHourDivs();
-
-});
+// Inputs
 
 
 // Static Traffic Map
@@ -31,14 +22,14 @@ $(document).ready(function () {
 // }
 
 
-// Directions
 
+// Directions Test
 function initMap() {
     var directionsService = new google.maps.DirectionsService;
     var directionsDisplay = new google.maps.DirectionsRenderer;
     var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 7,
-        center: {lat: 41.85, lng: -87.65}
+        zoom: 13,
+        center: {lat: 33.636193, lng: -117.739393}
     });
 
     var trafficLayer = new google.maps.TrafficLayer();
@@ -46,16 +37,40 @@ function initMap() {
     trafficLayer.setMap(map);
     directionsDisplay.setMap(map);
 
+
     directionsService.route({
         origin: 'Brea',
         destination: 'Irvine',
-        travelMode: 'DRIVING'
+
+        provideRouteAlternatives: true,
+        travelMode: 'DRIVING',
+        drivingOptions: {
+            departureTime: new Date(Date.now()),
+            trafficModel: 'bestguess'
+        }
+
     }, function (response, status) {
         if (status === 'OK') {
             directionsDisplay.setDirections(response);
         } else {
             window.alert('Directions request failed due to ' + status);
         }
+        console.log('response : ', response);
+        console.log('directionsDisplay.setDirections is: ', directionsDisplay.setDirections);
     });
+
     console.log(directionsService);
 }
+
+
+
+// // Add call to button
+// function getDirections() {
+
+// }
+
+// Initialize
+$(document).ready(function () {
+    makeHourDivs();
+
+});
