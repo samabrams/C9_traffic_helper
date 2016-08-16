@@ -40,6 +40,10 @@ function initMap() {
         zoom: 7,
         center: {lat: 41.85, lng: -87.65}
     });
+
+    var trafficLayer = new google.maps.TrafficLayer();
+    console.log(trafficLayer);
+    trafficLayer.setMap(map);
     directionsDisplay.setMap(map);
 
     directionsService.route({
