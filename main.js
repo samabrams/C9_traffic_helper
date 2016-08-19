@@ -40,15 +40,17 @@ function displayDirections(){
 
     }, function (response, status) {
         if (status === 'OK') {
-            var directionsDisplay = new google.maps.DirectionsRenderer({
-                map: map,
-                directions: response,
-                draggable: true,
-                polylineOptions: {
-                    strokeColor: 'red'
-                }
-
-            });
+            for (var i = 0, len = response.routes.length; i < len; i++) {
+                var directionsDisplay = new google.maps.DirectionsRenderer({
+                    map: map,
+                    directions: response,
+                    routeIndex: i,
+                    draggable: true,
+                    // polylineOptions: {
+                    //     strokeColor: 'red'
+                    // }
+                });
+            }
         } else {
             window.alert('Directions request failed due to ' + status);
         }
