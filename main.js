@@ -1,4 +1,6 @@
 var origin = '';
+var destination = '';
+var durationText = '';
 
 
 // Create Hour Divs
@@ -9,26 +11,25 @@ function makeHourDivs() {
     }
 }
 
-// Inputs
-
-
-// Button
+// Inputs and Button
 function applyClickHandler(){
     $('.getDirectionsBtn').click(getDirections);
 }
 function getDirections(){
     origin = $('.originInput').val();
     console.log('origin : ', origin);
-    displayDirections(origin);
+    destination = $('.destinationInput').val();
+    console.log('destination : ', destination);
+    displayDirections();
 }
 
-function displayDirections(origin){
+// Google Directions Service Route
+function displayDirections(){
     var directionsService = new google.maps.DirectionsService;
-    var destinationAddress = '9080 Irvine Center Irvine';
 
     directionsService.route({
         origin: origin,
-        destination: destinationAddress,
+        destination: destination,
 
         provideRouteAlternatives: true,
         travelMode: 'DRIVING',
@@ -38,7 +39,6 @@ function displayDirections(origin){
         }
 
     }, function (response, status) {
-        console.log('response : ', response);
         if (status === 'OK') {
             var directionsDisplay = new google.maps.DirectionsRenderer({
                 map: map,
@@ -53,13 +53,17 @@ function displayDirections(origin){
             window.alert('Directions request failed due to ' + status);
         }
         console.log('response : ', response);
+        console.log('response.routes.. is : ',response.routes[0].legs[0].duration.text);
+        durationText = response.routes[0].legs[0].duration.text;
+        $('#7').append('  Duration : ' + durationText);
+        $('#7').css('background-color', 'red');
         console.log('directionsDisplay is: ', directionsDisplay);
     });
 
     console.log(directionsService);
 }
 
-// Directions Test
+// Initial Map on load
 var map;
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -84,45 +88,13 @@ function initMap() {
         infoWindow.open(map, marker);
     });
 
-directionsDisplay.setMap(map);
-
+// Adds the traffic layer
+    var trafficLayer = new google.maps.TrafficLayer();
+    console.log(trafficLayer);
+    trafficLayer.setMap(map);
 }
-// var trafficLayer = new google.maps.TrafficLayer();
-// console.log(trafficLayer);
-// trafficLayer.setMap(map);
-// directionsDisplay.setMap(map);
-//
-//
-// directionsService.route({
-//     origin: 'Brea',
-//     destination: 'Irvine',
-//
-//     provideRouteAlternatives: true,
-//     travelMode: 'DRIVING',
-//     drivingOptions: {
-//         departureTime: new Date(Date.now()),
-//         trafficModel: 'bestguess'
-//     }
-//
-// }, function (response, status) {
-//     if (status === 'OK') {
-//         directionsDisplay.setDirections(response);
-//     } else {
-//         window.alert('Directions request failed due to ' + status);
-//     }
-//     console.log('response : ', response);
-//     console.log('directionsDisplay.setDirections is: ', directionsDisplay.setDirections);
-// });
-//
-// console.log(directionsService);
 
-
-// // Add call to button
-// function getDirections() {
-
-// }
-
-
+// Defines map style - set in the initMap
 var styles =
 
     [{"featureType": "water", "stylers": [{"color": "#19a0d8"}]}, {
