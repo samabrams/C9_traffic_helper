@@ -1,0 +1,4 @@
+<?php
+$pems_username = 'username';
+$pems_password = 'password';
+?>
