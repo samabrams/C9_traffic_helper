@@ -167,4 +167,7 @@ var styles =
 $(document).ready(function () {
     makeHourDivs();
     applyClickHandler();
+    var initialAjaxCall = new ajaxObject();
+    initialAjaxCall.ajaxCall('select');
+
 });
