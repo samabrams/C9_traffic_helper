@@ -8,6 +8,9 @@ function ajaxObject(callBack){
             origin: $('.originInput').val(),
             destination: $('.destinationInput').val(),
             date: $('.dateInput').val(),
+            // startKey: $().attr(), //todo: elementName to get startKey
+            // endKey: $().attr(), //todo: elementName to get endKey
+            // dateKey: $().attr(), //todo: elementName to get date
             command: this.command
         }
 

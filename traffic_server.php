@@ -3,14 +3,13 @@
     require_once('traffic_db_connect.php');
     //include all sql command pages
     require_once ('php_sql_commands/select.php');
+    require_once ('php_sql_commands/getCalc.php');
+
 
     //initializes data obj to be returned to api call
     $output = [
         'success' => 'true',
-        'data' => [
-            'onRamp' => [],
-            'offRamp' => []
-        ]
+        'data' => []
     ];
 
     //checks if DB link is valid
@@ -23,8 +22,9 @@
         case 'select';
             select();
             break;
-        case 'get';
-            
+        case 'getCalc';
+            getCalc();
+            break;
     }
 
     print_r(json_encode($output));
