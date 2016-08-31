@@ -169,4 +169,10 @@ var styles =
 $(document).ready(function () {
     makeHourDivs();
     applyClickHandler();
+    
+    var initialAjaxCall = new ajaxObject(function(success){
+        console.log('OnRamp and OffRamp data: ', success); //todo: replace with initialize functions (e.g. populate drop downs)
+    });
+    initialAjaxCall.ajaxCall('select');
+
 });

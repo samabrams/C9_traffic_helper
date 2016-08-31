@@ -1,0 +1,51 @@
+* Could not resolve host: http
+* Closing connection 0
+*   Trying 149.136.20.104...
+* Connected to pems.dot.ca.gov (149.136.20.104) port 80 (#1)
+> POST /?fwy=5&dir=S&station_id=1118326&dnode=VDS HTTP/1.1
+Host: pems.dot.ca.gov
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36
+Accept: */*
+Referer: /lfz/C9_traffic_helper/pems/get_data.php
+Cookie: cookiename=0
+Content-Length: 79
+Content-Type: application/x-www-form-urlencoded
+
+* upload completely sent off: 79 out of 79 bytes
+< HTTP/1.1 200 OK
+< Date: Tue, 30 Aug 2016 18:36:47 GMT
+< Server: Apache/2.2.15 (Oracle)
+< X-Powered-By: PHP/5.2.13
+* Added cookie PHPSESSID="9a10880291a47c6fede8beec91825408" for domain pems.dot.ca.gov, path /, expire 0
+< Set-Cookie: PHPSESSID=9a10880291a47c6fede8beec91825408; path=/
+< Expires: Thu, 19 Nov 1981 08:52:00 GMT
+< Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+< Pragma: no-cache
+< Content-Length: 3929
+< Content-Type: text/html; charset=UTF-8
+< 
+* Connection #1 to host pems.dot.ca.gov left intact
+* Found bundle for host pems.dot.ca.gov: 0x6a56d80
+* Re-using existing connection! (#1) with host pems.dot.ca.gov
+* Connected to pems.dot.ca.gov (149.136.20.104) port 80 (#1)
+> POST /?station_id=1118326&gn=minute&s_time_id=1472515200&lane1=1&dnode=VDS&content=loops&tab=det_timeseries HTTP/1.1
+Host: pems.dot.ca.gov
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36
+Accept: */*
+Referer: /lfz/C9_traffic_helper/pems/get_data.php
+Cookie: PHPSESSID=9a10880291a47c6fede8beec91825408; cookiename=0
+Content-Length: 79
+Content-Type: application/x-www-form-urlencoded
+
+* upload completely sent off: 79 out of 79 bytes
+< HTTP/1.1 200 OK
+< Date: Tue, 30 Aug 2016 18:36:48 GMT
+< Server: Apache/2.2.15 (Oracle)
+< X-Powered-By: PHP/5.2.13
+< Expires: Thu, 19 Nov 1981 08:52:00 GMT
+< Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+< Pragma: no-cache
+< Transfer-Encoding: chunked
+< Content-Type: text/html; charset=UTF-8
+< 
+* Connection #1 to host pems.dot.ca.gov left intact
