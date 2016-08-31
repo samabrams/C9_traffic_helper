@@ -2,7 +2,10 @@ var origin = '';
 var destination = '';
 var durationText = '';
 
-
+var app = angular.module('traffic', []);
+app.controller('trafficController', function () {
+    this.locations = ['Irvine', 'Los Angeles', 'Pasadena', 'Santa Monica' ]
+});
 // Create Hour Divs
 function makeHourDivs() {
     for (var i = 0; i < 24; i++) {
@@ -13,7 +16,12 @@ function makeHourDivs() {
 
 // Inputs and Button
 function applyClickHandler(){
-    $('.getDirectionsBtn').click(getDirections);
+    $('select').change(function(){
+        var origin = $('.originInput').val();
+        var destination = $('.destinationInput').val();
+        var day = $('.day').val();
+        if (origin != 'unselected' && destination != 'unselected' && day != 'unselected') getDirections();
+    });
 }
 function getDirections(){
     origin = $('.originInput').val();
@@ -40,6 +48,7 @@ function displayDirections(){
 
     }, function (response, status) {
         if (status === 'OK') {
+
             for (var i = 0, len = response.routes.length; i < len; i++) {
                 var directionsDisplay = new google.maps.DirectionsRenderer({
                     map: map,
