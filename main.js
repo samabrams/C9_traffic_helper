@@ -2,6 +2,7 @@ var origin = '';
 var destination = '';
 var durationText = '';
 
+
 var app = angular.module('traffic', []);
 app.controller('trafficController', function () {
     this.locations = ['Irvine', 'Los Angeles', 'Pasadena', 'Santa Monica' ]
@@ -60,6 +61,7 @@ function displayDirections(){
                     // }
                 });
             }
+
         } else {
             window.alert('Directions request failed due to ' + status);
         }
@@ -69,6 +71,7 @@ function displayDirections(){
         $('#7').append('  Duration : ' + durationText);
         $('#7').css('background-color', 'red');
         console.log('directionsDisplay is: ', directionsDisplay);
+        directionsDisplayed = true;
     });
 
     console.log(directionsService);

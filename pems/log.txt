@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 
 * Could not resolve host: http
 * Closing connection 0
 *   Trying 149.136.20.104...
 * Connected to pems.dot.ca.gov (149.136.20.104) port 80 (#1)
+=======
+* getaddrinfo(3) failed for http:80
+* Couldn't resolve host 'http'
+* Closing connection 0
+*   Trying 149.136.20.104...
+* Connected to pems.dot.ca.gov (149.136.20.104) port 80 (#1)
+>>>>>>> 6f820f109f024d277a36a09ac934dadd4f6fe85b
 > POST /?fwy=5&dir=S&station_id=1118326&dnode=VDS HTTP/1.1
 Host: pems.dot.ca.gov
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36
@@ -12,6 +20,7 @@ Cookie: cookiename=0
 Content-Length: 69
 Content-Type: application/x-www-form-urlencoded
 
+<<<<<<< HEAD
 * upload completely sent off: 69 out of 69 bytes
 < HTTP/1.1 200 OK
 
@@ -21,22 +30,39 @@ Content-Type: application/x-www-form-urlencoded
 * Added cookie PHPSESSID="9a10880291a47c6fede8beec91825408" for domain pems.dot.ca.gov, path /, expire 0
 < Set-Cookie: PHPSESSID=9a10880291a47c6fede8beec91825408; path=/
 
+=======
+* upload completely sent off: 69 out of 69 bytes
+< HTTP/1.1 200 OK
+< Date: Tue, 30 Aug 2016 17:40:21 GMT
+< Server: Apache/2.2.15 (Oracle)
+< X-Powered-By: PHP/5.2.13
+* Added cookie PHPSESSID="c203d1bd43ae6eb68afa9cbb7730d1f5" for domain pems.dot.ca.gov, path /, expire 0
+< Set-Cookie: PHPSESSID=c203d1bd43ae6eb68afa9cbb7730d1f5; path=/
+>>>>>>> 6f820f109f024d277a36a09ac934dadd4f6fe85b
 < Expires: Thu, 19 Nov 1981 08:52:00 GMT
 < Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
 < Pragma: no-cache
 < Content-Length: 3926
 < Content-Type: text/html; charset=UTF-8
 < 
+<<<<<<< HEAD
 * Connection #1 to host pems.dot.ca.gov left intact
 
 * Found bundle for host pems.dot.ca.gov: 0x6a56d80
 
 * Re-using existing connection! (#1) with host pems.dot.ca.gov
 * Connected to pems.dot.ca.gov (149.136.20.104) port 80 (#1)
+=======
+* Connection #1 to host pems.dot.ca.gov left intact
+* Found bundle for host pems.dot.ca.gov: 0x1007ae300
+* Re-using existing connection! (#1) with host pems.dot.ca.gov
+* Connected to pems.dot.ca.gov (149.136.20.104) port 80 (#1)
+>>>>>>> 6f820f109f024d277a36a09ac934dadd4f6fe85b
 > POST /?station_id=1118326&gn=minute&s_time_id=1472515200&lane1=1&dnode=VDS&content=loops&tab=det_timeseries HTTP/1.1
 Host: pems.dot.ca.gov
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36
 Accept: */*
+<<<<<<< HEAD
 
 Referer: /lfz/C9_traffic_helper/pems/get_data.php
 Cookie: PHPSESSID=9a10880291a47c6fede8beec91825408; cookiename=0
@@ -48,6 +74,16 @@ Content-Type: application/x-www-form-urlencoded
 < HTTP/1.1 200 OK
 
 < Date: Tue, 30 Aug 2016 18:36:48 GMT
+=======
+Referer: /lfz/trafficHelper/pems/get_data.php?_ijt=los91mu442updj8o189c8e0s8e
+Cookie: PHPSESSID=c203d1bd43ae6eb68afa9cbb7730d1f5; cookiename=0
+Content-Length: 69
+Content-Type: application/x-www-form-urlencoded
+
+* upload completely sent off: 69 out of 69 bytes
+< HTTP/1.1 200 OK
+< Date: Tue, 30 Aug 2016 17:40:22 GMT
+>>>>>>> 6f820f109f024d277a36a09ac934dadd4f6fe85b
 < Server: Apache/2.2.15 (Oracle)
 < X-Powered-By: PHP/5.2.13
 < Expires: Thu, 19 Nov 1981 08:52:00 GMT
@@ -56,12 +92,19 @@ Content-Type: application/x-www-form-urlencoded
 < Transfer-Encoding: chunked
 < Content-Type: text/html; charset=UTF-8
 < 
+<<<<<<< HEAD
 * Connection #1 to host pems.dot.ca.gov left intact
 
 
 * Found bundle for host pems.dot.ca.gov: 0x1007ae300
 * Re-using existing connection! (#1) with host pems.dot.ca.gov
 * Connected to pems.dot.ca.gov (149.136.20.104) port 80 (#1)
+=======
+* Connection #1 to host pems.dot.ca.gov left intact
+* Found bundle for host pems.dot.ca.gov: 0x1007ae300
+* Re-using existing connection! (#1) with host pems.dot.ca.gov
+* Connected to pems.dot.ca.gov (149.136.20.104) port 80 (#1)
+>>>>>>> 6f820f109f024d277a36a09ac934dadd4f6fe85b
 > POST /?report_form=1&dnode=VDS&content=loops&tab=det_q&export=text&station_id=1114708&s_time_id=1472428800&s_time_id_f=08%2F29%2F2016+00%3A00&e_time_id=1472515140&e_time_id_f=08%2F29%2F2016+23%3A59&tod=all&tod_from=0&tod_to=0&dow_0=on&dow_1=on&dow_2=on&dow_3=on&dow_4=on&dow_5=on&dow_6=on&holidays=on&agg=on&lane1=on&lane2=on&lane3=on&lane4=on&lane5=on&x=occ&y=flow HTTP/1.1
 Host: pems.dot.ca.gov
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36
@@ -71,7 +114,11 @@ Cookie: PHPSESSID=c203d1bd43ae6eb68afa9cbb7730d1f5; cookiename=0
 Content-Length: 69
 Content-Type: application/x-www-form-urlencoded
 
+<<<<<<< HEAD
 * upload completely sent off: 69 out of 69 bytes
+=======
+* upload completely sent off: 69 out of 69 bytes
+>>>>>>> 6f820f109f024d277a36a09ac934dadd4f6fe85b
 < HTTP/1.1 200 OK
 < Date: Tue, 30 Aug 2016 17:40:25 GMT
 < Server: Apache/2.2.15 (Oracle)
