@@ -7,7 +7,10 @@
     //initializes data obj to be returned to api call
     $output = [
         'success' => 'true',
-        'data' => []
+        'data' => [
+            'onRamp' => [],
+            'offRamp' => []
+        ]
     ];
 
     //checks if DB link is valid
@@ -23,7 +26,6 @@
         case 'get';
             
     }
-
 
     print_r(json_encode($output));
 ?>
