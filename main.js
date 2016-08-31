@@ -88,12 +88,22 @@ function initMap() {
     });
 
     var lfz = {lat: 33.636193, lng: -117.739393};
+    // var marker = new google.maps.Marker({
+    //     position: lfz,
+    //     map: map,
+    //     title: 'Learning Fuze',
+    //     icon: 'images/mark.png'
+    // });
+
+
+
+    // Markers - testing if I can add clickable markers as inputs
     var marker = new google.maps.Marker({
         position: lfz,
         map: map,
-        title: 'Learning Fuze'
+        title: 'Set Origin',
+        icon: 'images/mark.png'
     });
-
     var infoWindow = new google.maps.InfoWindow({
         content: 'Dan is the man!'
 
@@ -102,11 +112,34 @@ function initMap() {
         infoWindow.open(map, marker);
     });
 
-// Adds the traffic layer
-    var trafficLayer = new google.maps.TrafficLayer();
-    console.log(trafficLayer);
-    trafficLayer.setMap(map);
+    marker.addListener('click', function() {
+        map.setZoom(15);
+        map.setCenter(marker.getPosition());
+        console.log('after clicking marker, the marker.getPosition is : ', marker.getPosition());
+    });
 }
+
+// // Adds the traffic layer
+//     var trafficLayer = new google.maps.TrafficLayer();
+//     console.log(trafficLayer);
+//     trafficLayer.setMap(map);
+//
+// Origins and Destinations
+//
+// var onRamps = [
+//     {
+//         position: new google.maps.LatLng(33.636193, -117.739393),
+//         type: 'info'
+//     }
+// ];
+//
+// var offRamps = [
+//     {
+//         position: new google.maps.LatLng(33.636193, -117.739393),
+//         type: 'info'
+//     }
+// ];
+
 
 // Defines map style - set in the initMap
 var styles =
