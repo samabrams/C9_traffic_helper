@@ -1,4 +1,6 @@
-function ajaxObject(){
+function ajaxObject(callBack){
+    this.callBack = callBack.bind(this);
+    var self = this;
 
     this.ajaxCall = function(command){
         this.command = command;
@@ -15,7 +17,7 @@ function ajaxObject(){
             dataType: 'json',
             data: dataObj,
             success: function(success){
-                console.log(success);
+                self.callBack(success);
             }
         });
     }
