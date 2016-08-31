@@ -169,7 +169,7 @@ $(document).ready(function () {
     applyClickHandler();
     
     var initialAjaxCall = new ajaxObject(function(success){
-        console.log(success); //todo: replace with initialize functions (e.g. populate drop downs)
+        console.log('OnRamp and OffRamp data: ', success); //todo: replace with initialize functions (e.g. populate drop downs)
     });
     initialAjaxCall.ajaxCall('select');
 
