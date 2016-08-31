@@ -12,7 +12,7 @@ function ajaxObject(callBack){
             // endKey: $().attr(), //todo: elementName to get endKey
             // dateKey: $().attr(), //todo: elementName to get date
             command: this.command
-        }
+        };
 
         $.ajax({
             url: 'traffic_server.php',
@@ -21,6 +21,9 @@ function ajaxObject(callBack){
             data: dataObj,
             success: function(success){
                 self.callBack(success);
+            },
+            error: function(response){
+                console.log(response);
             }
         });
     }
