@@ -90,11 +90,33 @@ function initMap() {
         infoWindow.open(map, marker);
     });
 
+
+    // Markers - testing if I can add clickable markers as inputs
+    var marker = new google.maps.Marker({
+        position: lfz,
+        map: map,
+        title: 'Set Origin'
+    });
+
+    map.addListener('center_changed', function() {
+        // 3 seconds after the center of the map has changed, pan back to the
+        // marker.
+        window.setTimeout(function() {
+            map.panTo(marker.getPosition());
+        }, 3000);
+    });
+
+    marker.addListener('click', function() {
+        map.setZoom(15);
+        map.setCenter(marker.getPosition());
+        console.log('after clicking marker, the marker.getPosition is : ', marker.getPosition());
+    });
+}
 // // Adds the traffic layer
 //     var trafficLayer = new google.maps.TrafficLayer();
 //     console.log(trafficLayer);
 //     trafficLayer.setMap(map);
-}
+
 
 // Defines map style - set in the initMap
 var styles =
