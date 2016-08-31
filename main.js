@@ -90,10 +90,10 @@ function initMap() {
         infoWindow.open(map, marker);
     });
 
-// Adds the traffic layer
-    var trafficLayer = new google.maps.TrafficLayer();
-    console.log(trafficLayer);
-    trafficLayer.setMap(map);
+// // Adds the traffic layer
+//     var trafficLayer = new google.maps.TrafficLayer();
+//     console.log(trafficLayer);
+//     trafficLayer.setMap(map);
 }
 
 // Defines map style - set in the initMap
