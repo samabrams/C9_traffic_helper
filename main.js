@@ -92,8 +92,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         directionsService.route({
             origin: origin,
             destination: destination,
-
-            provideRouteAlternatives: true,
+            provideRouteAlternatives: false,
             travelMode: 'DRIVING',
             drivingOptions: {
                 departureTime: new Date(Date.now()),
