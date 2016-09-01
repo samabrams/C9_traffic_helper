@@ -68,7 +68,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
             var destination = $('.destinationInput').val();
             var day = $('.day').val();
             if (origin != 'unselected' && destination != 'unselected' && day != 'unselected') {
-                getDirections();
+                self.getDirections();
             }
         });
     };
@@ -77,7 +77,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         console.log('origin : ', origin);
         destination = $('.destinationInput').val() + " I5 orange county";
         console.log('destination : ', destination);
-        displayDirections();
+        self.displayDirections();
     };
 
 // Google Directions Service Route
