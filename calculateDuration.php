@@ -29,10 +29,18 @@ foreach($listingArr as $k=>$v){
         }
     }
 }
+
+
 foreach( $arr as &$value){
     //miles / (miles/hour) * 60 * 60 == duration in sec
     $value['duration'] = ($value['distance']/$value['speed'])*3600; //in seconds
+    //$updateDistance = 'UPDATE `avg_speed` SET distance = $value["distance"] WHERE station_Num IN($value["station_Num"]) ';
+    $distance = $value['distance'];
+    $station = $value['station_Num'];
+    //mysqli_query($link, "UPDATE `avg_speed` SET `distance` = '$distance' WHERE `station_Num` = $station");
 }
+
+
 echo '<pre>';
 print_r($arr);
 echo '</pre>';
