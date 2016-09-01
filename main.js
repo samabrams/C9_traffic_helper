@@ -53,6 +53,9 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
             self.offRamps.push(offRampInfo[index].name);
         }
     });
+    self.calculationCall = new self.httpObject(function (response){
+        console.log(response);
+    });
     // Create Hour Divs
     self.makeHourDivs = function() {
         for (var i = 0; i < 24; i++) {
@@ -69,6 +72,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
             var day = $('.day').val();
             if (origin != 'unselected' && destination != 'unselected' && day != 'unselected') {
                 self.getDirections();
+                self.calculationCall.httpCall('getCalc');
             }
         });
     };
