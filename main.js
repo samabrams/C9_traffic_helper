@@ -44,13 +44,14 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
     };
     self.initialhttpCall = new self.httpObject(function (response) {
         self.initMap();
+        console.log(response.data.data.onRamp);
         var onRampInfo = response.data.data.onRamp;
         var offRampInfo = response.data.data.offRamp;
         for (var index in onRampInfo){
-            self.onRamps.push(onRampInfo[index].name);
+            self.onRamps.push({name: onRampInfo[index].name, id: onRampInfo[index].ID, lat: onRampInfo[index].lat, long: onRampInfo[index].long});
         }
         for (var index in offRampInfo) {
-            self.offRamps.push(offRampInfo[index].name);
+            self.offRamps.push({name: offRampInfo[index].name, id: offRampInfo[index].ID, lat: offRampInfo[index].lat, long: offRampInfo[index].long});
         }
     });
     self.calculationCall = new self.httpObject(function (response){
@@ -77,9 +78,9 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         });
     };
     self.getDirections = function () {
-        origin = $('.originInput').val() + " I5 orange county";
+        origin = $('.originInput').find(":selected").attr('lat')+", "+ $('.originInput').find(":selected").attr('long') ;
         console.log('origin : ', origin);
-        destination = $('.destinationInput').val() + " I5 orange county";
+        destination = $('.destinationInput').find(":selected").attr('lat')+", "+$('.destinationInput').find(":selected").attr('long');
         console.log('destination : ', destination);
         self.displayDirections();
     };
