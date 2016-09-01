@@ -19,11 +19,8 @@ function ajaxObject(callBack){
             method: 'post',
             dataType: 'json',
             data: dataObj,
-            success: function(success){
+            success: function(success) {
                 self.callBack(success);
-            },
-            error: function(response){
-                console.log(response);
             }
         });
     }
