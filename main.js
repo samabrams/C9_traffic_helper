@@ -1,11 +1,15 @@
 var origin = '';
 var destination = '';
 var durationText = '';
+var onRampNames = [];
+var offRampNames = [];
 
 
 var app = angular.module('traffic', []);
 app.controller('trafficController', function () {
-    this.locations = ['Irvine', 'Los Angeles', 'Pasadena', 'Santa Monica' ]
+    this.onRamps = onRampNames;
+    this.offRamps = offRampNames;
+
 });
 // Create Hour Divs
 function makeHourDivs() {
@@ -25,9 +29,9 @@ function applyClickHandler(){
     });
 }
 function getDirections(){
-    origin = $('.originInput').val();
+    origin = $('.originInput').val() + " I5 orange county";
     console.log('origin : ', origin);
-    destination = $('.destinationInput').val();
+    destination = $('.destinationInput').val()  + " I5 orange county";
     console.log('destination : ', destination);
     displayDirections();
 }
@@ -214,9 +218,16 @@ var styles =
 $(document).ready(function () {
     makeHourDivs();
     applyClickHandler();
-    
+
     var initialAjaxCall = new ajaxObject(function(success){
-        console.log('OnRamp and OffRamp data: ', success); //todo: replace with initialize functions (e.g. populate drop downs)
+        var onRampInfo = success.data.onRamp;
+        var offRampInfo = success.data.offRamp;
+        for (var i = 0; i < onRampInfo.length; i++){
+            onRampNames.push(onRampInfo[i].name);
+        }
+        for (var i = 0; i < offRampInfo.length; i++){
+            offRampNames.push(offRampInfo[i].name);
+        }
     });
     initialAjaxCall.ajaxCall('select');
 
