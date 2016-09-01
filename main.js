@@ -216,6 +216,9 @@ var styles =
 
 // Initialize
 $(document).ready(function () {
+    var pageLoaded = new Date().getTime();
+    var dataLoaded = null;
+    console.log(pageLoaded);
     makeHourDivs();
     applyClickHandler();
 
@@ -228,6 +231,8 @@ $(document).ready(function () {
         for (var i = 0; i < offRampInfo.length; i++){
             offRampNames.push(offRampInfo[i].name);
         }
+        dataLoaded = new Date().getTime();
+        console.log('length of call: ', dataLoaded-pageLoaded);
     });
     initialAjaxCall.ajaxCall('select');
 
