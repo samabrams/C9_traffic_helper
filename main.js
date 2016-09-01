@@ -6,11 +6,55 @@ var offRampNames = [];
 
 
 var app = angular.module('traffic', []);
-app.controller('trafficController', function () {
-    this.onRamps = onRampNames;
-    this.offRamps = offRampNames;
-
+app.config(function ($httpProvider) {
+    $httpProvider.defaults.headers.post = {"Content-Type": "application/x-www-form-urlencoded"};
 });
+app.controller('trafficController', function ($scope, $http) {
+    var self = this;
+    self.onRamps = [];
+    self.offRamps = [];
+    self.AjaxObject = function (callBack) {
+        var ajaxSelf = this;
+        ajaxSelf.callBack = callBack.bind(ajaxSelf);
+
+
+        ajaxSelf.ajaxCall = function (command) {
+            this.command = command;
+            var dataObj = $.param({
+                origin: $('.originInput').val(),
+                destination: $('.destinationInput').val(),
+                date: $('.dateInput').val(),
+                // startKey: $().attr(), //todo: elementName to get startKey
+                // endKey: $().attr(), //todo: elementName to get endKey
+                // dateKey: $().attr(), //todo: elementName to get date
+                command: this.command
+            });
+
+            $http({
+                url: 'traffic_server.php',
+                method: 'post',
+                dataType: 'json',
+                data: dataObj
+            }).then(function success(response) {
+               ajaxSelf.callBack(response);
+            }, function error(response) {
+                console.log('ERROR ERROR ERROR', response);
+            });
+        }
+    };
+    var initialAjaxCall = new self.AjaxObject(function (success) {
+        var onRampInfo = success.data.data.onRamp;
+        var offRampInfo = success.data.data.offRamp;
+        for (var index in onRampInfo){
+            self.onRamps.push(onRampInfo[index].name);
+        }
+        for (var index in offRampInfo){
+            self.offRamps.push(offRampInfo[index].name);
+        }
+    });
+    initialAjaxCall.ajaxCall('select');
+});
+
 // Create Hour Divs
 function makeHourDivs() {
     for (var i = 0; i < 24; i++) {
@@ -20,24 +64,24 @@ function makeHourDivs() {
 }
 
 // Inputs and Button
-function applyClickHandler(){
-    $('select').change(function(){
+function applyChangeHandler() {
+    $('select').change(function () {
         var origin = $('.originInput').val();
         var destination = $('.destinationInput').val();
         var day = $('.day').val();
         if (origin != 'unselected' && destination != 'unselected' && day != 'unselected') getDirections();
     });
 }
-function getDirections(){
+function getDirections() {
     origin = $('.originInput').val() + " I5 orange county";
     console.log('origin : ', origin);
-    destination = $('.destinationInput').val()  + " I5 orange county";
+    destination = $('.destinationInput').val() + " I5 orange county";
     console.log('destination : ', destination);
     displayDirections();
 }
 
 // Google Directions Service Route
-function displayDirections(){
+function displayDirections() {
     var directionsService = new google.maps.DirectionsService;
 
     directionsService.route({
@@ -70,7 +114,7 @@ function displayDirections(){
             window.alert('Directions request failed due to ' + status);
         }
         console.log('response : ', response);
-        console.log('response.routes.. is : ',response.routes[0].legs[0].duration.text);
+        console.log('response.routes.. is : ', response.routes[0].legs[0].duration.text);
         durationText = response.routes[0].legs[0].duration.text;
         $('#7').append('  Duration : ' + durationText);
         $('#7').css('background-color', 'red');
@@ -100,7 +144,6 @@ function initMap() {
     // });
 
 
-
     // Markers - testing if I can add clickable markers as inputs
     var marker = new google.maps.Marker({
         position: lfz,
@@ -116,7 +159,7 @@ function initMap() {
         infoWindow.open(map, marker);
     });
 
-    marker.addListener('click', function() {
+    marker.addListener('click', function () {
         map.setZoom(15);
         map.setCenter(marker.getPosition());
         console.log('after clicking marker, the marker.getPosition is : ', marker.getPosition());
@@ -220,20 +263,5 @@ $(document).ready(function () {
     var dataLoaded = null;
     console.log(pageLoaded);
     makeHourDivs();
-    applyClickHandler();
-
-    var initialAjaxCall = new ajaxObject(function(success){
-        var onRampInfo = success.data.onRamp;
-        var offRampInfo = success.data.offRamp;
-        for (var i = 0; i < onRampInfo.length; i++){
-            onRampNames.push(onRampInfo[i].name);
-        }
-        for (var i = 0; i < offRampInfo.length; i++){
-            offRampNames.push(offRampInfo[i].name);
-        }
-        dataLoaded = new Date().getTime();
-        console.log('length of call: ', dataLoaded-pageLoaded);
-    });
-    initialAjaxCall.ajaxCall('select');
-
+    applyChangeHandler();
 });
