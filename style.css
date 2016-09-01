@@ -48,7 +48,7 @@ body {
 }
 
 .hourGrid2{
-    background-color: #0fb8ad;
+    /*background-color: #0fb8ad;*/
 }
 
 .hours {
@@ -66,10 +66,19 @@ body {
 }
 
 #map {
-    height:100vh;
+    height:50vh;
     width:60vw;
     display: inline-block;
-    background-color: #4cae4c;
+    /*background-color: #4cae4c;*/
+    /*background-image: url(images/mapPlaceholder.png);*/
+    float: left;
+}
+
+#graph {
+    height:50vh;
+    width:60vw;
+    display: inline-block;
+    /*background-color: #4cae4c;*/
     /*background-image: url(images/mapPlaceholder.png);*/
     float: left;
 }
