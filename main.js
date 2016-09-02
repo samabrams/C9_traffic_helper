@@ -43,8 +43,6 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         }
     };
     self.initialhttpCall = new self.httpObject(function (response) {
-        self.initMap();
-        console.log(response.data.data.onRamp);
         var onRampInfo = response.data.data.onRamp;
         var offRampInfo = response.data.data.offRamp;
         for (var index in onRampInfo){
@@ -53,6 +51,8 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         for (var index in offRampInfo) {
             self.offRamps.push({name: offRampInfo[index].name, id: offRampInfo[index].ID, lat: offRampInfo[index].lat, long: offRampInfo[index].long});
         }
+        self.initMap();
+        self.addMarkers();
     });
     self.calculationCall = new self.httpObject(function (response){
         console.log(response);
@@ -148,26 +148,36 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         // });
 
 
+    };
+    self.addMarkers = function() {
+        var marker = null;
         // Markers - testing if I can add clickable markers as inputs
-        var marker = new google.maps.Marker({
-            position: lfz,
-            map: map,
-            title: 'Set Origin',
-            icon: 'images/mark.png'
-        });
-        var infoWindow = new google.maps.InfoWindow({
-            content: 'Dan is the man!'
+        for (var i = 0; i < self.onRamps.length; i++) {
+            var position = {lat: parseFloat(self.onRamps[i].lat), lng: parseFloat(self.onRamps[i].long)};
+            console.log(position);
+            marker = new google.maps.Marker({
+                position: position,
+                map: map,
+                title: self.onRamps[i].name,
+                icon: 'images/mark.png'
+            });
 
-        });
-        marker.addListener('click', function () {
-            infoWindow.open(map, marker);
-        });
+            // marker.addListener('click', function () {
+            //     var openWindow = function() {
+            //
+            //     }();
+            // });
 
-        marker.addListener('click', function () {
-            map.setZoom(15);
-            map.setCenter(marker.getPosition());
-            console.log('after clicking marker, the marker.getPosition is : ', marker.getPosition());
-        });
+            marker.addListener('click', function () {
+                map.setZoom(15);
+                map.setCenter(this.getPosition());
+                console.log('after clicking marker, the marker.getPosition is : ', this.getPosition());
+                var infoWindow = new google.maps.InfoWindow({
+                    content: this.title
+                });
+                infoWindow.open(map, this);
+            });
+        }
     };
 
 // // Adds the traffic layer
