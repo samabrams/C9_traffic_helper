@@ -136,7 +136,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
             zoom: 11,
             center: {lat: 33.636193, lng: -117.739393},
 
-            styles: self.styles,
+            styles: self.styles
         });
 
         var lfz = {lat: 33.636193, lng: -117.739393};
@@ -162,14 +162,8 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
                 icon: 'images/mark.png'
             });
 
-            // marker.addListener('click', function () {
-            //     var openWindow = function() {
-            //
-            //     }();
-            // });
-
             marker.addListener('click', function () {
-                map.setZoom(15);
+                map.setZoom(12);
                 map.setCenter(this.getPosition());
                 console.log('after clicking marker, the marker.getPosition is : ', this.getPosition());
                 var infoWindow = new google.maps.InfoWindow({
@@ -177,6 +171,12 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
                 });
                 infoWindow.open(map, this);
             });
+            // marker.addListener('mouseover', function () {
+            //     var infoWindow = new google.maps.InfoWindow({
+            //         content: this.title
+            //     });
+            //     infoWindow.open(map, this);
+            // });
         }
     };
 
