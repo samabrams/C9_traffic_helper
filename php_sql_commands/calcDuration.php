@@ -46,6 +46,9 @@ function getCalc(){
         $innerArr = [];
         for($b = 0; $b < $innerRows; $b++){
             $data = mysqli_fetch_assoc($dateTime[$a]);
+            //$data2 = mysqli_fetch_assoc($dateTime[$a]);
+            print_r("<pre>");
+            print_r("</pre>");
             if($b%2 == 0){
                 array_push($innerArr,[$data['time'] => $data['duration_in_sec']] );
             }
@@ -53,15 +56,44 @@ function getCalc(){
         array_push($outerArr,$innerArr);
     }
 
-//    $outputArr['data'] = [];
-//    for ($x = 0; $x < $outerArr[0]; $x++){
-//        //array_push($outputArr,[$data['time'] => $data['duration_in_sec']] );
-//    }
+
+    $set1 = $outerArr[0];
+    $set2 = $outerArr[1];
+    $set3 = $outerArr[2];
+
+    $timeQuery = 'SELECT time FROM i5_speed_5_stations WHERE station_Num = '.$startId.' AND DAYOFWEEK(date) ='.$date;
+    $time = mysqli_query($link,$timeQuery);
+    $timeRow = mysqli_num_rows($time);
+    $timeArr = [];
+    for($h = 0; $h < $timeRow;$h++){
+        $timeVal = mysqli_fetch_assoc($time);
+        if($h % 2 == 0){
+            $timeArr[]=$timeVal;
+        }
+    }
+
+
+    $finalOutput = [];
+    for($k=0; $k < count($timeArr); $k++){
+        $finalOutput[] = [$timeArr[$k]['time'] => 0];
+    }
+
+
+        for($l = 0; $l < count($set1);$l++){
+            $finalOutput[$l][$timeArr[$l]['time']] += $set1[$l][$timeArr[$l]['time']];
+        }
+        for($l = 0; $l < count($set2);$l++){
+            $finalOutput[$l][$timeArr[$l]['time']] += $set2[$l][$timeArr[$l]['time']];
+        }
+        for($l = 0; $l < count($set2);$l++){
+        $finalOutput[$l][$timeArr[$l]['time']] += $set2[$l][$timeArr[$l]['time']];
+        }
+
 
     print_r("<pre>");
-    print_r($outerArr);
+    //print_r($finalOutput[0][$timeArr[0]['time']]);
+    print_r($finalOutput);
     print_r("</pre>");
-
 }
 
 getCalc();
