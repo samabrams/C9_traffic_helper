@@ -1,8 +1,8 @@
 <?php
 
 function getCalc(){
-    $link = mysqli_connect('iamleonhardt.com', 'Brian', 'ireallyliketraffic', 'traffichelper');
-    //global $output, $link;
+    global $link;
+    print($link);
     $output['data']['calc'] = [];
 
 
