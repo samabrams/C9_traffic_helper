@@ -2,7 +2,7 @@
 
 function getCalc(){
     global $link;
-    print($link);
+    
     $output['data']['calc'] = [];
 
 
