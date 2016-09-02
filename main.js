@@ -134,7 +134,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
     self.initMap = function () {
         map = new google.maps.Map(document.getElementById('map'), {
             zoom: 11,
-            center: {lat: 33.636193, lng: -117.739393},
+            center: {lat: 33.4288, lng: -117.612},
 
             styles: self.styles,
         });
