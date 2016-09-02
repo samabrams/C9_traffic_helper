@@ -18,7 +18,7 @@ function getCalc(){
     //$startKeyId = 'SELECT primaryKey FROM i5_stations WHERE ID=' . $startId;    //returns 1
     //$endKeyId = 'SELECT primaryKey FROM i5_stations WHERE ID=' . $endId;        //returns 3
 
-    $stationIDQuery = 'SELECT ID FROM `i5_stations` WHERE primaryKey BETWEEN ' . 1 . ' AND ' . 3; //returns ID of 123
+    $stationIDQuery = 'SELECT ID FROM `i5_stations` WHERE primaryKey BETWEEN ' . 1 . ' AND ' . 3; //returns ID of 1,2,3
 
 
     $results = mysqli_query($link, $stationIDQuery);
@@ -28,12 +28,10 @@ function getCalc(){
         $data = mysqli_fetch_assoc($results);
         array_push($stationIDarr, $data);
     }
-
-
-
+    
     $dateTime=[];
     for($j=0 ; $j < count($stationIDarr); $j++){
-        $distanceQuery = 'SELECT duration_in_sec, time FROM i5_speed_5_stations WHERE station_Num = '.$stationIDarr[$j]['ID'].' AND DAYOFWEEK(date) ='.$date;
+        $distanceQuery = 'SELECT duration_in_sec, time FROM i5_speed_5_stations WHERE station_Num = '.$stationIDarr[$j]['ID'].' AND DAYOFWEEK(date) ='.$date;//returns duration and time based on the ID
         $results = mysqli_query($link, $distanceQuery);
         $dateTime[] = $results;
     }
@@ -46,52 +44,38 @@ function getCalc(){
         $innerArr = [];
         for($b = 0; $b < $innerRows; $b++){
             $data = mysqli_fetch_assoc($dateTime[$a]);
-            //$data2 = mysqli_fetch_assoc($dateTime[$a]);
-            print_r("<pre>");
-            print_r("</pre>");
             if($b%2 == 0){
                 array_push($innerArr,[$data['time'] => $data['duration_in_sec']] );
             }
         }
-        array_push($outerArr,$innerArr);
+        array_push($outerArr,$innerArr);// creates arrays inside an array based on all traveled stations. each inner array has key => value (time(every 10min increment) and duration)
     }
 
-
-    $set1 = $outerArr[0];
-    $set2 = $outerArr[1];
-    $set3 = $outerArr[2];
-
-    $timeQuery = 'SELECT time FROM i5_speed_5_stations WHERE station_Num = '.$startId.' AND DAYOFWEEK(date) ='.$date;
+    $timeQuery = 'SELECT time FROM i5_speed_5_stations WHERE station_Num = '.$startId.' AND DAYOFWEEK(date) ='.$date;//returns time
+    //because $innerArr's key (time value) does not have a var name associated with it, cannot actually call time that would be used as a key for final output array.
+    //$data['time'] has already been used(which is currently 23:55:00), cannot be reset to 00:00:00
     $time = mysqli_query($link,$timeQuery);
     $timeRow = mysqli_num_rows($time);
     $timeArr = [];
     for($h = 0; $h < $timeRow;$h++){
         $timeVal = mysqli_fetch_assoc($time);
         if($h % 2 == 0){
-            $timeArr[]=$timeVal;
+            $timeArr[]=$timeVal; //returns an array of key => value (number position and time)
         }
     }
 
-
-    $finalOutput = [];
+    $finalOutput = []; //will hold time as key and summed up duration as value
     for($k=0; $k < count($timeArr); $k++){
         $finalOutput[] = [$timeArr[$k]['time'] => 0];
     }
 
-
-        for($l = 0; $l < count($set1);$l++){
-            $finalOutput[$l][$timeArr[$l]['time']] += $set1[$l][$timeArr[$l]['time']];
+    for($o = 0; $o < count($outerArr); $o++){
+        for($l = 0; $l < count($outerArr[0]);$l++){
+            $finalOutput[$l][$timeArr[$l]['time']] += $outerArr[$o][$l][$timeArr[$l]['time']];
         }
-        for($l = 0; $l < count($set2);$l++){
-            $finalOutput[$l][$timeArr[$l]['time']] += $set2[$l][$timeArr[$l]['time']];
-        }
-        for($l = 0; $l < count($set2);$l++){
-        $finalOutput[$l][$timeArr[$l]['time']] += $set2[$l][$timeArr[$l]['time']];
-        }
-
+    }
 
     print_r("<pre>");
-    //print_r($finalOutput[0][$timeArr[0]['time']]);
     print_r($finalOutput);
     print_r("</pre>");
 }
