@@ -6,6 +6,8 @@
     require_once ('php_sql_commands/getCalc.php');
 
 
+
+
     //initializes data obj to be returned to api call
     $output = [
         'success' => 'true',
@@ -18,14 +20,17 @@
         $output['message'] = "Unable to connect to database.";
     }
 
-    switch($_POST['command']){
-        case 'select';
-            select();
-            break;
-        case 'getCalc';
-            getCalc();
-            break;
-    }
+//    switch($_POST['command']){
+//        case 'select';
+//            select();
+//            break;
+//        case 'getCalc';
+//            getCalc();
+//            break;
+//    }
 
+    getCalc();
     print_r(json_encode($output));
+    
+
 ?>

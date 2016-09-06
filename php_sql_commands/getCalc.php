@@ -1,7 +1,7 @@
 <?php
 
 function getCalc(){
-    global $link;
+    global $link, $output;
     
     $output['data']['calc'] = [];
 
@@ -75,10 +75,11 @@ function getCalc(){
         }
     }
 
-    print_r("<pre>");
-    print_r($finalOutput);
-    print_r("</pre>");
+
+    $output['data']['calc'] = $finalOutput;
+
+    return $output;
 }
 
-getCalc();
+
 ?>
