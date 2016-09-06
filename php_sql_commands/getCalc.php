@@ -51,6 +51,7 @@ function getCalc(){
         array_push($outerArr,$innerArr);// creates arrays inside an array based on all traveled stations. each inner array has key => value (time(every 10min increment) and duration)
     }
 
+
     $timeQuery = 'SELECT time FROM i5_speed_5_stations WHERE station_Num = '.$startId.' AND DAYOFWEEK(date) ='.$date;//returns time
     //because $innerArr's key (time value) does not have a var name associated with it, cannot actually call time that would be used as a key for final output array.
     //$data['time'] has already been used(which is currently 23:55:00), cannot be reset to 00:00:00
@@ -75,11 +76,32 @@ function getCalc(){
         }
     }
 
+    function array_change_key(&$array, $old_key, $new_key)
+    {
+        $array[$new_key] = $array[$old_key];
+        unset($array[$old_key]);
+        return;
 
-    $output['data']['calc'] = $finalOutput;
+    };
 
+
+    foreach($finalOutput as $key => &$value){
+        foreach($value as $innerKey => $innerValue){
+            $oldKey = $innerKey;    //key
+            $newKey = substr(str_replace(":","",$innerKey),0,4);
+            //array_change_key($finalOutput[0],$oldKey,$newKey);
+            array_change_key($value, $oldKey, $newKey);
+        }
+    }
+    
+    $output['data'] = $finalOutput;
     return $output;
 }
 
 
+
+
+
 ?>
+
+

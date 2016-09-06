@@ -20,17 +20,16 @@
         $output['message'] = "Unable to connect to database.";
     }
 
-//    switch($_POST['command']){
-//        case 'select';
-//            select();
-//            break;
-//        case 'getCalc';
-//            getCalc();
-//            break;
-//    }
-
-    getCalc();
+    switch($_POST['command']){
+        case 'select';
+            select();
+            break;
+        case 'getCalc';
+            getCalc();
+            break;
+    }
+ 
     print_r(json_encode($output));
-    
+
 
 ?>
