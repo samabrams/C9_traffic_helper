@@ -14,8 +14,10 @@ app.config(function ($httpProvider) {
 });
 app.controller('trafficController', function ($scope, $http, $timeout) {
     var self = this;
+    self.originClicked = false;
     self.onRamps = [];
     self.offRamps = [];
+    self.markers = [];
     self.httpObject = function (callBack) {
         var httpSelf = this;
         httpSelf.callBack = callBack.bind(httpSelf);
@@ -157,34 +159,50 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
 
     };
     self.addMarkers = function() {
-        var marker = null;
         // Markers - testing if I can add clickable markers as inputs
         for (var index in latLongs) {
+            var markerObj = {};
             var position = {lat: parseFloat(latLongs[index].lat), lng: parseFloat(latLongs[index].lng)};
             console.log(position);
-            marker = new google.maps.Marker({
+            markerObj.marker = new google.maps.Marker({
                 position: position,
                 map: map,
                 title: index,
                 icon: 'images/mark.png'
             });
-
-            marker.addListener('click', function () {
-                map.setZoom(12);
-                map.setCenter(this.getPosition());
-                console.log('after clicking marker, the marker.getPosition is : ', this.getPosition());
-                var infoWindow = new google.maps.InfoWindow({
-                    content: this.title
-                });
-                infoWindow.open(map, this);
+            markerObj.infoWindow = new google.maps.InfoWindow({
+                content: markerObj.marker.title
             });
-            // marker.addListener('mouseover', function () {
-            //     var infoWindow = new google.maps.InfoWindow({
-            //         content: this.title
-            //     });
-            //     infoWindow.open(map, this);
-            // });
+
+            self.markers.push(markerObj);
+            console.log('markers inner: ', self.markers);
         }
+        console.log('markers: ', self.markers);
+       self.markers.forEach(function(value){
+            var markObj = value;
+            console.log('markObj: ',markObj);
+            markObj.marker.addListener('click', function () {
+                if (!self.originClicked){
+                    origin = this.getPosition();
+                    console.log('origin after marker click: ', origin);
+                    self.originClicked = true;
+                }
+                else {
+                    destination = this.getPosition();
+                    if (origin != destination){
+                        self.displayDirections();
+                        self.originClicked = false;
+                    }
+                }
+            });
+            markObj.marker.addListener('mouseover', function () {
+                markObj.infoWindow.open(map, this);
+            });
+            markObj.marker.addListener('mouseout', function(){
+                    markObj.infoWindow.close();
+            })
+
+        });
     };
 
 // // Adds the traffic layer
