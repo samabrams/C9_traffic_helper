@@ -220,7 +220,7 @@
                 else {
                     time = time_string;
                 }
-                data_set={hour: time, sunday: dummyData.sunday[time], monday: dummyData.monday[time],
+                data_set={hour: time.slice(0,2) + ':' + time.slice(2,4), sunday: dummyData.sunday[time], monday: dummyData.monday[time],
                     tuesday: dummyData.tuesday[time], wednesday: dummyData.wednesday[time],
                     thursday: dummyData.thursday[time],  friday: dummyData.friday[time], saturday: dummyData.saturday[time]};
                 total_data.push(data_set);

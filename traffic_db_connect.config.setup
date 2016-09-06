@@ -1,3 +1,0 @@
-<?php
-    $link = mysqli('database address', 'username', 'password', 'database name', port);
-?>

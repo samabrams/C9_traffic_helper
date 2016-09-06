@@ -55,248 +55,96 @@
 </script>
 
 <script async defer>
-    var dummyData = {
-        origin: 'San Luis Rey', //starting station
-        destination: 'Presidio', //ending station
-        length: 4, //distance of trip in miles
-        sunday: {
-            '0000': 3,
-            '0100': 3,
-            '0200': 3,
-            '0300': 3,
-            '0400': 3 ,
-            '0500': 3 ,
-            '0600': 4 ,
-            '0700': 5 ,
-            '0800': 5 ,
-            '0900': 5 ,
-            '1000': 5 ,
-            '1100': 6 ,
-            '1200': 8 ,
-            '1300': 7 ,
-            '1400': 6 ,
-            '1500': 6 ,
-            '1600': 7 ,
-            '1700': 8 ,
-            '1800': 6 ,
-            '1900': 5 ,
-            '2000': 5 ,
-            '2100': 4 ,
-            '2200': 3 ,
-            '2300': 3
+    var dummyData = null;
+
+    console.log(dummyData);
+
+    populatedData = $.ajax({
+        url: 'dummyAJAX.php',
+        method: 'post',
+        data: 'json',
+        mimeType: "multipart/form-data",
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function(response){
+            //console.log('ajax');
+            //console.log(response);
         },
-        monday: {
-            '0000': 3 ,
-            '0100': 3 ,
-            '0200': 3 ,
-            '0300': 3 ,
-            '0400': 3 ,
-            '0500': 3 ,
-            '0600': 4 ,
-            '0700': 9 ,
-            '0800': 12 ,
-            '0900': 7 ,
-            '1000': 4 ,
-            '1100': 4 ,
-            '1200': 5 ,
-            '1300': 6 ,
-            '1400': 6 ,
-            '1500': 8 ,
-            '1600': 11 ,
-            '1700': 15 ,
-            '1800': 10 ,
-            '1900': 8 ,
-            '2000': 4 ,
-            '2100': 4 ,
-            '2200': 3 ,
-            '2300': 3
-        },
-        tuesday: {
-            '0000': 3 ,
-            '0100': 3 ,
-            '0200': 3 ,
-            '0300': 3 ,
-            '0400': 3 ,
-            '0500': 3 ,
-            '0600': 4 ,
-            '0700': 7 ,
-            '0800': 10 ,
-            '0900': 8 ,
-            '1000': 4 ,
-            '1100': 5 ,
-            '1200': 6 ,
-            '1300': 7 ,
-            '1400': 8 ,
-            '1500': 9 ,
-            '1600': 14 ,
-            '1700': 17 ,
-            '1800': 9 ,
-            '1900': 8 ,
-            '2000': 5 ,
-            '2100': 6 ,
-            '2200': 3 ,
-            '2300': 3
-        },
-        wednesday: {
-            '0000': 3 ,
-            '0100': 3 ,
-            '0200': 3 ,
-            '0300': 3 ,
-            '0400': 3 ,
-            '0500': 3 ,
-            '0600': 6 ,
-            '0700': 8 ,
-            '0800': 9 ,
-            '0900': 10 ,
-            '1000': 8 ,
-            '1100': 6 ,
-            '1200': 5 ,
-            '1300': 5 ,
-            '1400': 7 ,
-            '1500': 9 ,
-            '1600': 9 ,
-            '1700': 17 ,
-            '1800': 15 ,
-            '1900': 10 ,
-            '2000': 7 ,
-            '2100': 5 ,
-            '2200': 5 ,
-            '2300': 3
-        },
-        thursday: {
-            '0000': 3 ,
-            '0100': 3 ,
-            '0200': 3 ,
-            '0300': 3 ,
-            '0400': 3 ,
-            '0500': 4 ,
-            '0600': 6 ,
-            '0700': 10 ,
-            '0800': 11 ,
-            '0900': 6 ,
-            '1000': 5 ,
-            '1100': 6 ,
-            '1200': 5 ,
-            '1300': 5 ,
-            '1400': 6 ,
-            '1500': 7 ,
-            '1600': 9 ,
-            '1700': 11 ,
-            '1800': 16 ,
-            '1900': 9 ,
-            '2000': 6 ,
-            '2100': 6 ,
-            '2200': 5 ,
-            '2300': 4
-        },
-        friday: {
-            '0000': 3 ,
-            '0100': 3 ,
-            '0200': 3 ,
-            '0300': 3 ,
-            '0400': 3 ,
-            '0500': 3 ,
-            '0600': 4 ,
-            '0700': 10 ,
-            '0800': 10 ,
-            '0900': 6 ,
-            '1000': 5 ,
-            '1100': 5 ,
-            '1200': 6 ,
-            '1300': 7 ,
-            '1400': 8 ,
-            '1500': 8 ,
-            '1600': 13 ,
-            '1700': 13 ,
-            '1800': 12 ,
-            '1900': 9 ,
-            '2000': 6 ,
-            '2100': 5 ,
-            '2200': 4 ,
-            '2300': 4
-        },
-        saturday: {
-            '0000': 6 ,
-            '0100': 5 ,
-            '0200': 4 ,
-            '0300': 4 ,
-            '0400': 3 ,
-            '0500': 3 ,
-            '0600': 4 ,
-            '0700': 4 ,
-            '0800': 5 ,
-            '0900': 5 ,
-            '1000': 5 ,
-            '1100': 6 ,
-            '1200': 6 ,
-            '1300': 6 ,
-            '1400': 6 ,
-            '1500': 8 ,
-            '1600': 8 ,
-            '1700': 8 ,
-            '1800': 9 ,
-            '1900': 8 ,
-            '2000': 6 ,
-            '2100': 6 ,
-            '2200': 5 ,
-            '2300': 5
+        error: function(response){
+            console.log(response);
         }
-    };
-    //since the property names are strings, it's best to use bracket notation here,
-    //for instance:
-    //        console.log('duration on sunday at midnight: ' + dummyData.sunday['0000'] + ' minutes');
-    //        console.log('duration on monday at noon: ' + dummyData.monday['1200']+ ' minutes');
-    //        console.log('duration on tuesday at 3pm: ' + dummyData.tuesday['1500']+ ' minutes');
-    //        console.log('sunday: ', dummyData.sunday);
+    }).then(function(response) {
+        dummyData = JSON.parse(response);
+        console.log('then');
+        console.log(dummyData);
+    });
 
-    var total_data = [];
+    populatedData.done(function(){
 
-    function graph_data() {
-        for (i = 0; i < 2400; i+=100) {
-            var time = null;
-            var time_string = i.toString();
-
-            if (time_string.length == 1) {
-                time = "000" + time_string;
-            }
-            else if (time_string.length == 2) {
-                time = "00" + time_string;
-            }
-            else if (time_string.length == 3) {
-                time = "0" + time_string;
-            }
-            else {
-                time = time_string;
-            }
-            data_set={hour: time, sunday: dummyData.sunday[time], monday: dummyData.monday[time],
-                tuesday: dummyData.tuesday[time], wednesday: dummyData.wednesday[time],
-                thursday: dummyData.thursday[time],  friday: dummyData.friday[time], saturday: dummyData.saturday[time]};
-            total_data.push(data_set);
+        for (entry in dummyData)
+        {
+            console.log('loop');
+            console.log(dummyData[entry]);
         }
-    }
+        //console.log('done');
+        //console.log(dummyData);
+        //since the property names are strings, it's best to use bracket notation here,
+        //for instance:
+        //        console.log('duration on sunday at midnight: ' + dummyData.sunday['0000'] + ' minutes');
+        //        console.log('duration on monday at noon: ' + dummyData.monday['1200']+ ' minutes');
+        //        console.log('duration on tuesday at 3pm: ' + dummyData.tuesday['1500']+ ' minutes');
+        //        console.log('sunday: ', dummyData.sunday);
 
-    graph_data();
+        var total_data = [];
 
-    new Morris.Line({
-        // ID of the element in which to draw the chart.
-        element: 'graph',
-        // Chart data records -- each entry in this array corresponds to a point on
-        // the chart.
+        function graph_data() {
+            for (i = 0; i < 2400; i+=100) {
+                var time = null;
+                var time_string = i.toString();
 
-        parseTime: false,
+                if (time_string.length == 1) {
+                    time = "000" + time_string;
+                }
+                else if (time_string.length == 2) {
+                    time = "00" + time_string;
+                }
+                else if (time_string.length == 3) {
+                    time = "0" + time_string;
+                }
+                else {
+                    time = time_string;
+                }
+                data_set={hour: time, sunday: dummyData.sunday[time], monday: dummyData.monday[time],
+                    tuesday: dummyData.tuesday[time], wednesday: dummyData.wednesday[time],
+                    thursday: dummyData.thursday[time],  friday: dummyData.friday[time], saturday: dummyData.saturday[time]};
+                total_data.push(data_set);
+            }
+        }
 
-        data: total_data,
+        graph_data();
 
-        // The name of the data record attribute that contains x-values.
-        xkey: 'hour',
-        // A list of names of data record attributes that contain y-values.
-        ykeys: ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'],
-        // Labels for the ykeys -- will be displayed when you hover over the
-        // chart.
-        labels: ['sunday','monday','tuesday','wednesday','thursday','friday','saturday']
+        new Morris.Line({
+            // ID of the element in which to draw the chart.
+            element: 'graph',
+            // Chart data records -- each entry in this array corresponds to a point on
+            // the chart.
 
-        // Chart data records -- each entry in this array corresponds to a point on
-        // the chart.
+            parseTime: false,
+
+            data: total_data,
+
+            // The name of the data record attribute that contains x-values.
+            xkey: 'hour',
+            // A list of names of data record attributes that contain y-values.
+            ykeys: ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'],
+            // Labels for the ykeys -- will be displayed when you hover over the
+            // chart.
+            labels: ['sunday','monday','tuesday','wednesday','thursday','friday','saturday']
+
+            // Chart data records -- each entry in this array corresponds to a point on
+            // the chart.
+        });
     });
 
 </script>
