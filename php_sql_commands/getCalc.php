@@ -1,14 +1,15 @@
 <?php
 function getCalc(){
     global $link, $output;
-    
+
     $output['data'] = [];
 
     //TODO : fix sql query with with SUM() function
 
-    $startId = $_POST['startKey'];
-    $endId = $_POST['endKey'];
-    $date = $_POST['date'];
+    $startId = $_POST['origin'];
+    $endId = $_POST['destination'];
+//    $date = $_POST['date'];
+    $date = 1;
 
     $startKeyId = 'SELECT primaryKey FROM i5_stations WHERE ID=' . $startId;
     $startResults = mysqli_query($link, $startKeyId);
@@ -18,7 +19,7 @@ function getCalc(){
     $endResults = mysqli_query($link, $endKeyId);
     $endData = mysqli_fetch_assoc($endResults);
 
-    $stationIDQuery = 'SELECT ID FROM `i5_stations` WHERE primaryKey BETWEEN ' . $startData . ' AND ' . $endData; //returns ID of 1,2,3
+    $stationIDQuery = 'SELECT ID FROM `i5_stations` WHERE primaryKey BETWEEN ' . $startData['primaryKey'] . ' AND ' . $endData['primaryKey']; //returns ID of 1,2,3
     $results = mysqli_query($link, $stationIDQuery);
     $rows = mysqli_num_rows($results);
     $stationIDarr = [];
@@ -38,7 +39,7 @@ function getCalc(){
 
     $outerArr = [];
     for($a = 0; $a < $rows; $a++){
-        $innerRows = mysqli_num_rows($dateTime[$a]);
+        $innerRows = mysqli_num_rows($dateTime[$a]); //problem
         $innerArr = [];
         for($b = 0; $b < $innerRows; $b++){
             $data = mysqli_fetch_assoc($dateTime[$a]);
