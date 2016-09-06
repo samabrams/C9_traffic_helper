@@ -127,6 +127,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
                 parseTime: false,
 
                 data: total_data,
+                lineColors: ['#0ea8e3', '#305066', '#22c3aa', '#db4825', '#c7db4c', '#19a0d8', '#e85113'],
 
                 // The name of the data record attribute that contains x-values.
                 xkey: 'hour',
