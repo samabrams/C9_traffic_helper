@@ -23,10 +23,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
             var dataObj = $.param({
                 origin: $('.originInput').val(),
                 destination: $('.destinationInput').val(),
-                date: $('.dateInput').val(),
-                // startKey: $().attr(), //todo: elementName to get startKey
-                // endKey: $().attr(), //todo: elementName to get endKey
-                // dateKey: $().attr(), //todo: elementName to get date
+                date: $('.day').val(),
                 command: this.command
             });
 
