@@ -65,84 +65,84 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         }
     };
 // Draw Graph
-    self.createGraph = function() {
-        //remove previous graph
-        $('#graph').empty();
-
-        var dummyData = null;
-
-        //retrieve data from DB
-        populatedData = $.ajax({
-            url: 'dummyAJAX.php',
-            method: 'post',
-            data: 'json',
-            mimeType: "multipart/form-data",
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function(response){
-                //console.log('ajax');
-            },
-            error: function(response){
-                console.log(response);
-            }
-        }).then(function(response) {
-            dummyData = JSON.parse(response);
-            //console.log('then');
-        });
-
-        populatedData.done(function(){
-            //use data from DB to create array
-            var total_data = [];
-            var time = null;
-            var time_string = null;
-
-            for (i = 0; i < 2400; i+=100) {
-                time = null;
-                time_string = i.toString();
-
-                if (time_string.length == 1) {
-                    time = "000" + time_string;
-                }
-                else if (time_string.length == 2) {
-                    time = "00" + time_string;
-                }
-                else if (time_string.length == 3) {
-                    time = "0" + time_string;
-                }
-                else {
-                    time = time_string;
-                }
-                data_set={hour: time, sunday: dummyData.sunday[time], monday: dummyData.monday[time],
-                    tuesday: dummyData.tuesday[time], wednesday: dummyData.wednesday[time],
-                    thursday: dummyData.thursday[time],  friday: dummyData.friday[time], saturday: dummyData.saturday[time]};
-                total_data.push(data_set);
-            }
-
-            //pass array total_data to Morris for graph creation
-            new Morris.Line({
-                // ID of the element in which to draw the chart.
-                element: 'graph',
-                // Chart data records -- each entry in this array corresponds to a point on
-                // the chart.
-                resize: true,
-
-                parseTime: false,
-
-                data: total_data,
-
-                // The name of the data record attribute that contains x-values.
-                xkey: 'hour',
-                // A list of names of data record attributes that contain y-values.
-                ykeys: ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'],
-                // Labels for the ykeys -- will be displayed when you hover over the
-                // chart.
-                labels: ['sunday','monday','tuesday','wednesday','thursday','friday','saturday']
-                // Chart data records -- each entry in this array corresponds to a point on
-                // the chart.
-            });
-        });
-    };
+//     self.createGraph = function() {
+//         //remove previous graph
+//         $('#graph').empty();
+//
+//         var dummyData = null;
+//
+//         //retrieve data from DB
+//         populatedData = $.ajax({
+//             url: 'dummyAJAX.php',
+//             method: 'post',
+//             data: 'json',
+//             mimeType: "multipart/form-data",
+//             contentType: false,
+//             cache: false,
+//             processData: false,
+//             success: function(response){
+//                 //console.log('ajax');
+//             },
+//             error: function(response){
+//                 console.log(response);
+//             }
+//         }).then(function(response) {
+//             dummyData = JSON.parse(response);
+//             //console.log('then');
+//         });
+//
+//         populatedData.done(function(){
+//             //use data from DB to create array
+//             var total_data = [];
+//             var time = null;
+//             var time_string = null;
+//
+//             for (i = 0; i < 2400; i+=100) {
+//                 time = null;
+//                 time_string = i.toString();
+//
+//                 if (time_string.length == 1) {
+//                     time = "000" + time_string;
+//                 }
+//                 else if (time_string.length == 2) {
+//                     time = "00" + time_string;
+//                 }
+//                 else if (time_string.length == 3) {
+//                     time = "0" + time_string;
+//                 }
+//                 else {
+//                     time = time_string;
+//                 }
+//                 data_set={hour: time, sunday: dummyData.sunday[time], monday: dummyData.monday[time],
+//                     tuesday: dummyData.tuesday[time], wednesday: dummyData.wednesday[time],
+//                     thursday: dummyData.thursday[time],  friday: dummyData.friday[time], saturday: dummyData.saturday[time]};
+//                 total_data.push(data_set);
+//             }
+//
+//             //pass array total_data to Morris for graph creation
+//             new Morris.Line({
+//                 // ID of the element in which to draw the chart.
+//                 element: 'graph',
+//                 // Chart data records -- each entry in this array corresponds to a point on
+//                 // the chart.
+//                 resize: true,
+//
+//                 parseTime: false,
+//
+//                 data: total_data,
+//
+//                 // The name of the data record attribute that contains x-values.
+//                 xkey: 'hour',
+//                 // A list of names of data record attributes that contain y-values.
+//                 ykeys: ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'],
+//                 // Labels for the ykeys -- will be displayed when you hover over the
+//                 // chart.
+//                 labels: ['sunday','monday','tuesday','wednesday','thursday','friday','saturday']
+//                 // Chart data records -- each entry in this array corresponds to a point on
+//                 // the chart.
+//             });
+//         });
+//     };
 // Inputs and Button
     self.applyChangeHandler = function () {
         $('select').change(function () {
@@ -152,7 +152,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
             if (origin != 'unselected' && destination != 'unselected' && day != 'unselected') {
                 self.getDirections();
                 self.calculationCall.httpCall('getCalc');
-                self.createGraph();
+                //self.createGraph();
             }
         });
     };
