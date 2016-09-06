@@ -1,10 +1,12 @@
 
 select {
-    width: 95%;
+    width: 15%;
     background-color: rgba(255, 255, 255, .85);
     border: 1px solid rgba(255, 255, 255, 0.6);
     border-radius: 1px;
     box-shadow: 0 2px 4px rgba(255, 255, 255, 0.3);
+    display: inline-block;
+    margin: 0 0.5vw;
 
 }
 select option {
@@ -18,8 +20,9 @@ select:focus {
 h4 {
     color: rgba(255, 255, 255, 1);
     font-weight: 300;
-    margin: 5px 0;
+    margin-left: 1.5vw;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    display: inline-block;
 }
 
 body {
@@ -34,21 +37,20 @@ body {
     box-sizing:border-box;
 }
 
-.hourGrid1, .hourGrid2 {
+.hourGrid2 {
     height:100vh;
     width: 20vw;
     display: inline-block;
-    float:left;
+    float:right;
 }
 
-.hourGrid1 {
+.titleBar {
+    width: 80vw;
+    height: 6vh;
+    min-height: 55px;
     background-color: #292929;
-    padding: 1vw;
+    padding: 0 1vw;
     box-sizing: border-box;
-}
-
-.hourGrid2{
-    /*background-color: #0fb8ad;*/
 }
 
 .hours {
@@ -65,18 +67,9 @@ body {
     background: #ffffff;
 }
 
-#map {
-    height:50vh;
-    width:60vw;
-    display: inline-block;
-    /*background-color: #4cae4c;*/
-    /*background-image: url(images/mapPlaceholder.png);*/
-    float: left;
-}
-
-#graph {
-    height:50vh;
-    width:60vw;
+#map, #graph {
+    height:47vh;
+    width:80vw;
     display: inline-block;
     /*background-color: #4cae4c;*/
     /*background-image: url(images/mapPlaceholder.png);*/
@@ -89,14 +82,17 @@ body {
     text-align: center;
     z-index:100;
     background-color: rgba(255,255,255,0.8);
-    border: 2px solid rgba(200,200,200,0.8);
+    /*border: 2px solid #f0e4d3;*/
     border-radius: 10px;
 }
 
 .logo {
-    margin: 1vh 0;
+    /*margin: 1vh 0;*/
     font-size: 2em;
     color: #ffffff;
+    display: inline-block;
+    line-height: 55px;
+
 }
 
 input {
