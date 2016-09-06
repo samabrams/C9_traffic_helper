@@ -5,7 +5,6 @@
     require_once ('php_sql_commands/select.php');
     require_once ('php_sql_commands/getCalc.php');
 
-
     //initializes data obj to be returned to api call
     $output = [
         'success' => 'true',
@@ -26,6 +25,7 @@
             getCalc();
             break;
     }
-
+ 
     print_r(json_encode($output));
+
 ?>
