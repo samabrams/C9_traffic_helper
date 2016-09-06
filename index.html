@@ -57,8 +57,6 @@
 <script async defer>
     var dummyData = null;
 
-    console.log(dummyData);
-
     populatedData = $.ajax({
         url: 'dummyAJAX.php',
         method: 'post',
@@ -76,17 +74,17 @@
         }
     }).then(function(response) {
         dummyData = JSON.parse(response);
-        console.log('then');
-        console.log(dummyData);
+        //console.log('then');
+        //console.log(dummyData);
     });
 
     populatedData.done(function(){
 
-        for (entry in dummyData)
-        {
-            console.log('loop');
-            console.log(dummyData[entry]);
-        }
+//        for (entry in dummyData)
+//        {
+//            console.log('loop');
+//            console.log(dummyData[entry]);
+//        }
         //console.log('done');
         //console.log(dummyData);
         //since the property names are strings, it's best to use bracket notation here,
