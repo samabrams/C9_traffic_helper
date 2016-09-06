@@ -1,25 +1,24 @@
 <?php
 function getCalc(){
-
     global $link, $output;
     
     $output['data'] = [];
 
     //TODO : fix sql query with with SUM() function
 
-    //$startId = $_POST['startKey'];  //int coressponding to ID
-    //$endId = $_POST['endKey'];      //int coressponding to ID
-    //$date = $_POST['date'];         //day of week as number 1=Sun - 7=Sat
-    $startId = 1204198;
-    $endId =1204230;
-    $date = 2;
+    $startId = $_POST['startKey'];
+    $endId = $_POST['endKey'];
+    $date = $_POST['date'];
 
-    //$startKeyId = 'SELECT primaryKey FROM i5_stations WHERE ID=' . $startId;    //returns 1
-    //$endKeyId = 'SELECT primaryKey FROM i5_stations WHERE ID=' . $endId;        //returns 3
+    $startKeyId = 'SELECT primaryKey FROM i5_stations WHERE ID=' . $startId;
+    $startResults = mysqli_query($link, $startKeyId);
+    $startData = mysqli_fetch_assoc($startResults);
 
-    $stationIDQuery = 'SELECT ID FROM `i5_stations` WHERE primaryKey BETWEEN ' . 1 . ' AND ' . 3; //returns ID of 1,2,3
+    $endKeyId = 'SELECT primaryKey FROM i5_stations WHERE ID=' . $endId;
+    $endResults = mysqli_query($link, $endKeyId);
+    $endData = mysqli_fetch_assoc($endResults);
 
-
+    $stationIDQuery = 'SELECT ID FROM `i5_stations` WHERE primaryKey BETWEEN ' . $startData . ' AND ' . $endData; //returns ID of 1,2,3
     $results = mysqli_query($link, $stationIDQuery);
     $rows = mysqli_num_rows($results);
     $stationIDarr = [];
@@ -94,4 +93,3 @@ function getCalc(){
     $output['data'] = $finalOutput;
 }
 ?>
-
