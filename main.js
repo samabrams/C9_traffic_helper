@@ -1,9 +1,12 @@
 var origin = '';
 var destination = '';
 var durationText = '';
-var onRampNames = [];
-var offRampNames = [];
-
+var latLongs = {'S. LUIS REY': {lat: 33.405157,lng:-117.598075},
+                'MAGDALENA': {lat: 33.413656,lng: -117.602388},
+                'EL CAMINO REAL': {lat: 33.420511,lng: -117.606481},
+                'PRESIDIO': {lat: 33.428817,lng: -117.611856},
+                'PICO 2': {lat: 33.440004,lng: -117.624274}
+};
 
 var app = angular.module('traffic', []);
 app.config(function ($httpProvider) {
@@ -78,10 +81,14 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         });
     };
     self.getDirections = function () {
-        origin = $('.originInput').find(":selected").attr('lat')+", "+ $('.originInput').find(":selected").attr('long') ;
-        console.log('origin : ', origin);
-        destination = $('.destinationInput').find(":selected").attr('lat')+", "+$('.destinationInput').find(":selected").attr('long');
-        console.log('destination : ', destination);
+        var originID = $('.originInput').find(":selected").attr('id');
+        var originLat = latLongs[originID].lat;
+        var originLng = latLongs[originID].lng;
+        var destinationID = $('.destinationInput').find(":selected").attr('id');
+        var destinationLat = latLongs[destinationID].lat;
+        var destinationLng = latLongs[destinationID].lng;
+        origin = originLat+", "+originLng;
+        destination = destinationLat+", "+destinationLng;
         self.displayDirections();
     };
 
@@ -152,13 +159,13 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
     self.addMarkers = function() {
         var marker = null;
         // Markers - testing if I can add clickable markers as inputs
-        for (var i = 0; i < self.onRamps.length; i++) {
-            var position = {lat: parseFloat(self.onRamps[i].lat), lng: parseFloat(self.onRamps[i].long)};
+        for (var index in latLongs) {
+            var position = {lat: parseFloat(latLongs[index].lat), lng: parseFloat(latLongs[index].lng)};
             console.log(position);
             marker = new google.maps.Marker({
                 position: position,
                 map: map,
-                title: self.onRamps[i].name,
+                title: index,
                 icon: 'images/mark.png'
             });
 
