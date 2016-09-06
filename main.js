@@ -133,7 +133,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
     var map;
     self.initMap = function () {
         map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 11,
+            zoom: 13,
             center: {lat: 33.4288, lng: -117.612},
 
             styles: self.styles,
