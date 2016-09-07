@@ -79,7 +79,8 @@ body {
 #graph .morris-hover {
     float:none;
     position: absolute;
-    text-align: center;
+    text-align: left;
+    padding: 14px;
     z-index:100;
     background-color: rgba(255,255,255,0.8);
     /*border: 2px solid #f0e4d3;*/
