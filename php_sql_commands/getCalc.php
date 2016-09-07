@@ -8,8 +8,8 @@ function getCalc(){
 
     $startId = $_POST['origin'];
     $endId = $_POST['destination'];
-//    $date = $_POST['date'];
-    $date = 1;
+    $date = $_POST['date'];
+//    $date = 1;
 
     $startKeyId = 'SELECT primaryKey FROM i5_stations WHERE ID=' . $startId;
     $startResults = mysqli_query($link, $startKeyId);
