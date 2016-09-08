@@ -54,7 +54,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
     });
     self.calculationCall = new self.httpObject(function (response){
         self.createGraph(response);
-        console.log('calculationCall', response);
+        //console.log('calculationCall', response);
     });
     // Create Hour Divs
     self.makeHourDivs = function() {
@@ -70,20 +70,14 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         $('#graph').empty();
 
         var DBdata = DBresponse.data.data;
-        console.log(DBdata);
-
-        //populatedData.done(function(){
         //use data from DB to create array
         var total_data = [];
 
         for (var entry in DBdata[0]){
             for (var info in DBdata[0][entry]) {
                 //check to see if any data is undefined
-                //  if it is, set to zero for now
-
-                // if (typeof DBdata[6][entry][info] === undefined)
-                // {
                 try{
+                    //data on server is currently incomplete for Saturday,
                     if(DBdata[6][entry][info] === undefined)
                     {
                         throw 'sat undefined'
@@ -100,47 +94,10 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
                         wednesday: (DBdata[3][entry][info]/60).toFixed(2), thursday: (DBdata[4][entry][info]/60).toFixed(2),
                         friday: (DBdata[5][entry][info]/60).toFixed(2)};
                 }
-                //}
-                // else
-                // {
-                //     data_set={hour: info, sunday: DBdata[0][entry][info],
-                //         monday: DBdata[1][entry][info], tuesday: DBdata[2][entry][info],
-                //         wednesday: DBdata[3][entry][info], thursday: DBdata[4][entry][info],
-                //         friday: DBdata[5][entry][info], saturday: DBdata[6][entry][info]};
-                // }
 
                 total_data.push(data_set);
             }
         }
-
-        // for (var i in DBdata){
-        //     for (var j in DBdata[i]){
-        //         console.log(j + ' ' + DBdata[i][j]);
-        //     }
-        // }
-
-
-        // for (i = 0; i < 2400; i+=10) {
-        //     // time = null;
-        //     // time_string = i.toString();
-        //     //
-        //     // if (time_string.length == 1) {
-        //     //     time = "000" + time_string;
-        //     // }
-        //     // else if (time_string.length == 2) {
-        //     //     time = "00" + time_string;
-        //     // }
-        //     // else if (time_string.length == 3) {
-        //     //     time = "0" + time_string;
-        //     // }
-        //     // else {
-        //     //     time = time_string;
-        //     // }
-        //     data_set={hour: time, sunday: dummyData.sunday[time], monday: dummyData.monday[time],
-        //         tuesday: dummyData.tuesday[time], wednesday: dummyData.wednesday[time],
-        //         thursday: dummyData.thursday[time],  friday: dummyData.friday[time], saturday: dummyData.saturday[time]};
-        //     total_data.push(data_set);
-        // }
 
         //pass array total_data to Morris for graph creation
         new Morris.Line({
