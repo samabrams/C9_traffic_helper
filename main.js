@@ -52,8 +52,9 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         self.addMarkers();
     });
     self.calculationCall = new self.httpObject(function (response){
-        self.createGraph(response);
-        console.log(response);
+        //self.createGraph(response);
+        console.log('calcCall ', response);
+        return response;
     });
     // Create Hour Divs
     self.makeHourDivs = function() {
@@ -63,20 +64,50 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         }
     };
 // Draw Graph
-    self.createGraph = function(DBresponse) {
+
+    self.createGraph = function() {
         //remove previous graph
         $('#graph').empty();
 
-        var DBdata = DBresponse.data.data;
+        // var weekData = [];
+        // for (var i = 1; i <= 7; i++){
+        //     var dataObj = $.param({
+        //         origin: $('.originInput').val(),
+        //         destination: $('.destinationInput').val(),
+        //         date: i,
+        //         command: 'getCalc'
+        //     });
+        //
+        //     console.log('dataobj',dataObj);
+        //
+        //     $http({
+        //         url: 'traffic_server.php',
+        //         method: 'post',
+        //         dataType: 'json',
+        //         data: dataObj
+        //     }).then(function success(response) {
+        //         weekData.push(response);
+        //         console.log('day ' + i,response);
+        //     }, function error(response) {
+        //         console.log('ERROR ERROR ERROR', response);
+        //     });
+        // }
+        // console.log('weekData', weekData);
+
+        //var DBdata = DBresponse.data.data;
         //console.log(DBdata);
 
         //populatedData.done(function(){
         //use data from DB to create array
         var total_data = [];
 
-        for (var entry in DBdata){
-            for (var info in DBdata[entry]) {
-                data_set={hour: info, sunday: DBdata[entry][info]};
+        for (var entry in weekData[0]){
+            for (var info in weekData[0][entry]) {
+                data_set={hour: info, sunday: weekData[0][entry][info],
+                    monday: weekData[1][entry][info], tuesday: weekData[2][entry][info],
+                    wednesday: weekData[3][entry][info], thursday: weekData[4][entry][info],
+                    friday: weekData[5][entry][info], saturday: weekData[6][entry][info]};
+
                 total_data.push(data_set);
             }
         }
@@ -121,15 +152,15 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
             parseTime: false,
 
             data: total_data,
-            lineColors: ['#0ea8e3'],//, '#305066', '#22c3aa', '#db4825', '#c7db4c', '#19a0d8', '#e85113'],
+            lineColors: ['#0ea8e3', '#305066', '#22c3aa', '#db4825', '#c7db4c', '#19a0d8', '#e85113'],
 
             // The name of the data record attribute that contains x-values.
             xkey: 'hour',
             // A list of names of data record attributes that contain y-values.
-            ykeys: ['sunday'],//,'monday','tuesday','wednesday','thursday','friday','saturday'],
+            ykeys: ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'],
             // Labels for the ykeys -- will be displayed when you hover over the
             // chart.
-            labels: ['sunday'],//,'monday','tuesday','wednesday','thursday','friday','saturday']
+            labels: ['sunday','monday','tuesday','wednesday','thursday','friday','saturday']
             // Chart data records -- each entry in this array corresponds to a point on
             // the chart.
         });
