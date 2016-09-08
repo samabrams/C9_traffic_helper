@@ -1,15 +1,12 @@
 <?php
-function getCalc(){
+function getCalc($dayOfWeek){
     global $link, $output;
-
-    $output['data'] = [];
 
     //TODO : fix sql query with with SUM() function
 
     $startId = $_POST['origin'];
     $endId = $_POST['destination'];
 //    $date = $_POST['date'];
-    $date = 1;
 
     $startKeyId = 'SELECT primaryKey FROM i5_stations WHERE ID=' . $startId;
     $startResults = mysqli_query($link, $startKeyId);
@@ -30,7 +27,7 @@ function getCalc(){
 
     $dateTime=[];
     for($j=0 ; $j < count($stationIDarr); $j++){
-        $distanceQuery = 'SELECT duration_in_sec, time FROM i5_speed_5_stations WHERE station_Num = '.$stationIDarr[$j]['ID'].' AND DAYOFWEEK(date) ='.$date;//returns duration and time based on the ID
+        $distanceQuery = 'SELECT duration_in_sec, time FROM i5_speed_5_stations WHERE station_Num = '.$stationIDarr[$j]['ID'].' AND DAYOFWEEK(date) ='.$dayOfWeek;//returns duration and time based on the ID
         $results = mysqli_query($link, $distanceQuery);
         $dateTime[] = $results;
     }
@@ -50,7 +47,7 @@ function getCalc(){
         array_push($outerArr,$innerArr);// creates arrays inside an array based on all traveled stations. each inner array has key => value (time(every 10min increment) and duration)
     }
 
-    $timeQuery = 'SELECT time FROM i5_speed_5_stations WHERE station_Num = '.$startId.' AND DAYOFWEEK(date) ='.$date;//returns time
+    $timeQuery = 'SELECT time FROM i5_speed_5_stations WHERE station_Num = '.$startId.' AND DAYOFWEEK(date) ='.$dayOfWeek;//returns time
     //because $innerArr's key (time value) does not have a var name associated with it, cannot actually call time that would be used as a key for final output array.
     //$data['time'] has already been used(which is currently 23:55:00), cannot be reset to 00:00:00
     $time = mysqli_query($link,$timeQuery);
@@ -74,14 +71,6 @@ function getCalc(){
         }
     }
 
-    function array_change_key(&$array, $old_key, $new_key)
-    {
-        $array[$new_key] = $array[$old_key];
-        unset($array[$old_key]);
-        return;
-
-    };
-
     foreach($finalOutput as $key => &$value){
         foreach($value as $innerKey => $innerValue){
             $oldKey = $innerKey;    //key
@@ -91,6 +80,6 @@ function getCalc(){
         }
     }
     
-    $output['data'] = $finalOutput;
+    $output['data'][] = $finalOutput;
 }
 ?>
