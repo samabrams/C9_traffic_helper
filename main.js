@@ -33,6 +33,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
                 dataType: 'json',
                 data: dataObj
             }).then(function success(response) {
+                console.log(response);
                httpSelf.callBack(response);
             }, function error(response) {
                 console.log('ERROR ERROR ERROR', response);
@@ -52,8 +53,10 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         self.addMarkers();
     });
     self.calculationCall = new self.httpObject(function (response){
+
         self.createGraph(response);
         console.log(response);
+
     });
     // Create Hour Divs
     self.makeHourDivs = function() {
