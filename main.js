@@ -53,10 +53,8 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         self.addMarkers();
     });
     self.calculationCall = new self.httpObject(function (response){
-
         self.createGraph(response);
-        console.log(response);
-
+        console.log('calculationCall', response);
     });
     // Create Hour Divs
     self.makeHourDivs = function() {
@@ -66,20 +64,51 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         }
     };
 // Draw Graph
+
     self.createGraph = function(DBresponse) {
         //remove previous graph
         $('#graph').empty();
 
         var DBdata = DBresponse.data.data;
-        //console.log(DBdata);
+        console.log(DBdata);
 
         //populatedData.done(function(){
         //use data from DB to create array
         var total_data = [];
 
-        for (var entry in DBdata){
-            for (var info in DBdata[entry]) {
-                data_set={hour: info, sunday: DBdata[entry][info]};
+        for (var entry in DBdata[0]){
+            for (var info in DBdata[0][entry]) {
+                //check to see if any data is undefined
+                //  if it is, set to zero for now
+
+                // if (typeof DBdata[6][entry][info] === undefined)
+                // {
+                try{
+                    if(DBdata[6][entry][info] === undefined)
+                    {
+                        throw 'sat undefined'
+                    }
+                    data_set={hour: info, sunday: (DBdata[0][entry][info]/60).toFixed(2),
+                        monday: (DBdata[1][entry][info]/60).toFixed(2), tuesday: (DBdata[2][entry][info]/60).toFixed(2),
+                        wednesday: (DBdata[3][entry][info]/60).toFixed(2), thursday: (DBdata[4][entry][info]/60).toFixed(2),
+                        friday: (DBdata[5][entry][info]/60).toFixed(2), saturday:(DBdata[6][entry][info]/60).toFixed(2)};
+                }
+                catch(error)
+                {
+                    data_set={hour: info, sunday: (DBdata[0][entry][info]/60).toFixed(2),
+                        monday: (DBdata[1][entry][info]/60).toFixed(2), tuesday: (DBdata[2][entry][info]/60).toFixed(2),
+                        wednesday: (DBdata[3][entry][info]/60).toFixed(2), thursday: (DBdata[4][entry][info]/60).toFixed(2),
+                        friday: (DBdata[5][entry][info]/60).toFixed(2)};
+                }
+                //}
+                // else
+                // {
+                //     data_set={hour: info, sunday: DBdata[0][entry][info],
+                //         monday: DBdata[1][entry][info], tuesday: DBdata[2][entry][info],
+                //         wednesday: DBdata[3][entry][info], thursday: DBdata[4][entry][info],
+                //         friday: DBdata[5][entry][info], saturday: DBdata[6][entry][info]};
+                // }
+
                 total_data.push(data_set);
             }
         }
@@ -124,15 +153,15 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
             parseTime: false,
 
             data: total_data,
-            lineColors: ['#0ea8e3'],//, '#305066', '#22c3aa', '#db4825', '#c7db4c', '#19a0d8', '#e85113'],
+            lineColors: ['#0ea8e3', '#305066', '#22c3aa', '#db4825', '#c7db4c', '#19a0d8', '#e85113'],
 
             // The name of the data record attribute that contains x-values.
             xkey: 'hour',
             // A list of names of data record attributes that contain y-values.
-            ykeys: ['sunday'],//,'monday','tuesday','wednesday','thursday','friday','saturday'],
+            ykeys: ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'],
             // Labels for the ykeys -- will be displayed when you hover over the
             // chart.
-            labels: ['sunday'],//,'monday','tuesday','wednesday','thursday','friday','saturday']
+            labels: ['sunday','monday','tuesday','wednesday','thursday','friday','saturday']
             // Chart data records -- each entry in this array corresponds to a point on
             // the chart.
         });
