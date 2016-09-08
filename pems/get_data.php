@@ -2,11 +2,14 @@
     require('pems_config.php');
 
     $url = 'http://http://pems.dot.ca.gov/';
+    
+    //use network to what key and values are passed
     $postinfo = "username=".$pems_username."&password=".$pems_password."&login=Login&redirect=";
 
     $cookie_file_path = "cookiefile.data";
 
     $ch = curl_init();
+
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_COOKIEJAR, 'cookiefile.data');  //could be empty, but cause problems on some hosts
 
@@ -22,11 +25,6 @@
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $postinfo);
-
-    $test = curl_exec($ch);
-
-    curl_setopt($ch, CURLOPT_URL, "http://google.com");
-    $html = curl_exec($ch);
 
     curl_setopt($ch, CURLOPT_URL, "http://pems.dot.ca.gov/?station_id=1118326&gn=minute&s_time_id=1472515200&lane1=1&dnode=VDS&content=loops&tab=det_timeseries");
     $html = curl_exec($ch);
