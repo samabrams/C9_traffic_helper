@@ -33,6 +33,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
                 dataType: 'json',
                 data: dataObj
             }).then(function success(response) {
+                console.log(response);
                httpSelf.callBack(response);
             }, function error(response) {
                 console.log('ERROR ERROR ERROR', response);
@@ -52,9 +53,8 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         self.addMarkers();
     });
     self.calculationCall = new self.httpObject(function (response){
-        //self.createGraph(response);
-        console.log('calcCall ', response);
-        return response;
+        self.createGraph(response);
+        console.log('calculationCall', response);
     });
     // Create Hour Divs
     self.makeHourDivs = function() {
@@ -65,48 +65,49 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
     };
 // Draw Graph
 
-    self.createGraph = function() {
+    self.createGraph = function(DBresponse) {
         //remove previous graph
         $('#graph').empty();
 
-        // var weekData = [];
-        // for (var i = 1; i <= 7; i++){
-        //     var dataObj = $.param({
-        //         origin: $('.originInput').val(),
-        //         destination: $('.destinationInput').val(),
-        //         date: i,
-        //         command: 'getCalc'
-        //     });
-        //
-        //     console.log('dataobj',dataObj);
-        //
-        //     $http({
-        //         url: 'traffic_server.php',
-        //         method: 'post',
-        //         dataType: 'json',
-        //         data: dataObj
-        //     }).then(function success(response) {
-        //         weekData.push(response);
-        //         console.log('day ' + i,response);
-        //     }, function error(response) {
-        //         console.log('ERROR ERROR ERROR', response);
-        //     });
-        // }
-        // console.log('weekData', weekData);
-
-        //var DBdata = DBresponse.data.data;
-        //console.log(DBdata);
+        var DBdata = DBresponse.data.data;
+        console.log(DBdata);
 
         //populatedData.done(function(){
         //use data from DB to create array
         var total_data = [];
 
-        for (var entry in weekData[0]){
-            for (var info in weekData[0][entry]) {
-                data_set={hour: info, sunday: weekData[0][entry][info],
-                    monday: weekData[1][entry][info], tuesday: weekData[2][entry][info],
-                    wednesday: weekData[3][entry][info], thursday: weekData[4][entry][info],
-                    friday: weekData[5][entry][info], saturday: weekData[6][entry][info]};
+        for (var entry in DBdata[0]){
+            for (var info in DBdata[0][entry]) {
+                //check to see if any data is undefined
+                //  if it is, set to zero for now
+
+                // if (typeof DBdata[6][entry][info] === undefined)
+                // {
+                try{
+                    if(DBdata[6][entry][info] === undefined)
+                    {
+                        throw 'sat undefined'
+                    }
+                    data_set={hour: info, sunday: (DBdata[0][entry][info]/60).toFixed(2),
+                        monday: (DBdata[1][entry][info]/60).toFixed(2), tuesday: (DBdata[2][entry][info]/60).toFixed(2),
+                        wednesday: (DBdata[3][entry][info]/60).toFixed(2), thursday: (DBdata[4][entry][info]/60).toFixed(2),
+                        friday: (DBdata[5][entry][info]/60).toFixed(2), saturday:(DBdata[6][entry][info]/60).toFixed(2)};
+                }
+                catch(error)
+                {
+                    data_set={hour: info, sunday: (DBdata[0][entry][info]/60).toFixed(2),
+                        monday: (DBdata[1][entry][info]/60).toFixed(2), tuesday: (DBdata[2][entry][info]/60).toFixed(2),
+                        wednesday: (DBdata[3][entry][info]/60).toFixed(2), thursday: (DBdata[4][entry][info]/60).toFixed(2),
+                        friday: (DBdata[5][entry][info]/60).toFixed(2)};
+                }
+                //}
+                // else
+                // {
+                //     data_set={hour: info, sunday: DBdata[0][entry][info],
+                //         monday: DBdata[1][entry][info], tuesday: DBdata[2][entry][info],
+                //         wednesday: DBdata[3][entry][info], thursday: DBdata[4][entry][info],
+                //         friday: DBdata[5][entry][info], saturday: DBdata[6][entry][info]};
+                // }
 
                 total_data.push(data_set);
             }
