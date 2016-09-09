@@ -76,24 +76,50 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         for (var entry in DBdata[0]){
             for (var info in DBdata[0][entry]) {
                 //check to see if any data is undefined
-                try{
-                    //data on server is currently incomplete for Saturday,
-                    if(DBdata[6][entry][info] === undefined)
-                    {
-                        throw 'sat undefined'
-                    }
-                    data_set={hour: info.substr(0,2) + ':' + info.substr(2,3), sunday: (DBdata[0][entry][info]/60).toFixed(2),
-                        monday: (DBdata[1][entry][info]/60).toFixed(2), tuesday: (DBdata[2][entry][info]/60).toFixed(2),
-                        wednesday: (DBdata[3][entry][info]/60).toFixed(2), thursday: (DBdata[4][entry][info]/60).toFixed(2),
-                        friday: (DBdata[5][entry][info]/60).toFixed(2), saturday:(DBdata[6][entry][info]/60).toFixed(2)};
+
+                data_set={hour: info.substr(0,2) + ':' + info.substr(2,3)};
+                //sunday
+                try{//data exists for day/time, add to data point
+                    if(DBdata[0][entry][info] === undefined){throw 'sat undefined'}
+                    data_set.sunday = (DBdata[0][entry][info]/60).toFixed(2);
                 }
-                catch(error)
-                {
-                    data_set={hour: info.substr(0,2) + ':' + info.substr(2,3), sunday: (DBdata[0][entry][info]/60).toFixed(2),
-                        monday: (DBdata[1][entry][info]/60).toFixed(2), tuesday: (DBdata[2][entry][info]/60).toFixed(2),
-                        wednesday: (DBdata[3][entry][info]/60).toFixed(2), thursday: (DBdata[4][entry][info]/60).toFixed(2),
-                        friday: (DBdata[5][entry][info]/60).toFixed(2)};
+                catch(error){}//data does not exist for day/time, add nothing to data point
+                //monday
+                try{//data exists for day/time, add to data point
+                    if(DBdata[1][entry][info] === undefined){throw 'sat undefined'}
+                    data_set.monday = (DBdata[1][entry][info]/60).toFixed(2);
                 }
+                catch(error){}//data does not exist for day/time, add nothing to data point
+                //tuesday
+                try{//data exists for day/time, add to data point
+                    if(DBdata[2][entry][info] === undefined){throw 'sat undefined'}
+                    data_set.tuesday = (DBdata[2][entry][info]/60).toFixed(2);
+                }
+                catch(error){}//data does not exist for day/time, add nothing to data point
+                //wednesday
+                try{//data exists for day/time, add to data point
+                    if(DBdata[3][entry][info] === undefined){throw 'sat undefined'}
+                    data_set.wednesday = (DBdata[3][entry][info]/60).toFixed(2);
+                }
+                catch(error){}//data does not exist for day/time, add nothing to data point
+                //thursday
+                try{//data exists for day/time, add to data point
+                    if(DBdata[4][entry][info] === undefined){throw 'sat undefined'}
+                    data_set.thursday = (DBdata[4][entry][info]/60).toFixed(2);
+                }
+                catch(error){}//data does not exist for day/time, add nothing to data point
+                //friday
+                try{//data exists for day/time, add to data point
+                    if(DBdata[5][entry][info] === undefined){throw 'sat undefined'}
+                    data_set.friday = (DBdata[5][entry][info]/60).toFixed(2);
+                }
+                catch(error){}//data does not exist for day/time, add nothing to data point
+                //saturday
+                try{//data exists for day/time, add to data point
+                    if(DBdata[6][entry][info] === undefined){throw 'sat undefined'}
+                    data_set.saturday = (DBdata[6][entry][info]/60).toFixed(2);
+                }
+                catch(error){}//data does not exist for day/time, add nothing to data point
                 //console.log( info.substr(0,1) + ':' + info.substr(2,3) );
                 total_data.push(data_set);
             }
