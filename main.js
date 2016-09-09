@@ -33,7 +33,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
                 dataType: 'json',
                 data: dataObj
             }).then(function success(response) {
-               httpSelf.callBack(response);
+                httpSelf.callBack(response);
             }, function error(response) {
                 console.log('ERROR ERROR ERROR', response);
             });
@@ -42,27 +42,54 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
     self.initialhttpCall = new self.httpObject(function (response) {
         var onRampInfo = response.data.data.onRamp;
         var offRampInfo = response.data.data.offRamp;
-        for (var index in onRampInfo){
-            self.onRamps.push({name: onRampInfo[index].name, id: onRampInfo[index].ID, lat: onRampInfo[index].lat, long: onRampInfo[index].long});
+        for (var index in onRampInfo) {
+            self.onRamps.push({
+                name: onRampInfo[index].name,
+                id: onRampInfo[index].ID,
+                lat: onRampInfo[index].lat,
+                long: onRampInfo[index].long
+            });
         }
         for (var index in offRampInfo) {
-            self.offRamps.push({name: offRampInfo[index].name, id: offRampInfo[index].ID, lat: offRampInfo[index].lat, long: offRampInfo[index].long});
+            self.offRamps.push({
+                name: offRampInfo[index].name,
+                id: offRampInfo[index].ID,
+                lat: offRampInfo[index].lat,
+                long: offRampInfo[index].long
+            });
         }
         self.initMap();
         self.addMarkers();
     });
-    self.calculationCall = new self.httpObject(function (response){
+    self.calculationCall = new self.httpObject(function (response) {
         console.log(response);
     });
-    // Create Hour Divs
-    self.makeHourDivs = function() {
+    // Create Hour Divs and Panel Divs for accordion
+    self.makeHourDivs = function () {
         for (var i = 0; i < 24; i++) {
             var hour = $('<div>', {id: i + 1}).text(i + 1 + ':00').addClass('hours');
-            $('div.hourGrid2').append(hour);
+            // $('div.hourGrid2').append(hour);
+
+            var panel = $('<div>', {id: i + 1, class: 'panel'});
+            $('.hourGrid2').append(hour, panel);
         }
-    };
+    }
+
+    // Creates 10 minute increment div' within panel div - required for accordion
+    self.create10min = function () {
+        for (var j = 10; j < 60; j += 10) {
+            var timeIncrement = $('<div>', {class: j}).text(j);
+            $('.panel').append(timeIncrement);
+        }
+    }
+
+    self.appendAccordion = function() {
+        $('#accordion.hourGrid2').accordion();
+    }
+
+
 // Draw Graph
-    self.createGraph = function() {
+    self.createGraph = function () {
         //remove previous graph
         $('#graph').empty();
 
@@ -77,24 +104,24 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
             contentType: false,
             cache: false,
             processData: false,
-            success: function(response){
+            success: function (response) {
                 //console.log('ajax');
             },
-            error: function(response){
+            error: function (response) {
                 console.log(response);
             }
-        }).then(function(response) {
+        }).then(function (response) {
             dummyData = JSON.parse(response);
             //console.log('then');
         });
 
-        populatedData.done(function(){
+        populatedData.done(function () {
             //use data from DB to create array
             var total_data = [];
             var time = null;
             var time_string = null;
 
-            for (i = 0; i < 2400; i+=100) {
+            for (i = 0; i < 2400; i += 100) {
                 time = null;
                 time_string = i.toString();
 
@@ -110,9 +137,16 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
                 else {
                     time = time_string;
                 }
-                data_set={hour: time, sunday: dummyData.sunday[time], monday: dummyData.monday[time],
-                    tuesday: dummyData.tuesday[time], wednesday: dummyData.wednesday[time],
-                    thursday: dummyData.thursday[time],  friday: dummyData.friday[time], saturday: dummyData.saturday[time]};
+                data_set = {
+                    hour: time,
+                    sunday: dummyData.sunday[time],
+                    monday: dummyData.monday[time],
+                    tuesday: dummyData.tuesday[time],
+                    wednesday: dummyData.wednesday[time],
+                    thursday: dummyData.thursday[time],
+                    friday: dummyData.friday[time],
+                    saturday: dummyData.saturday[time]
+                };
                 total_data.push(data_set);
             }
 
@@ -132,10 +166,10 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
                 // The name of the data record attribute that contains x-values.
                 xkey: 'hour',
                 // A list of names of data record attributes that contain y-values.
-                ykeys: ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'],
+                ykeys: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
                 // Labels for the ykeys -- will be displayed when you hover over the
                 // chart.
-                labels: ['sunday','monday','tuesday','wednesday','thursday','friday','saturday']
+                labels: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
                 // Chart data records -- each entry in this array corresponds to a point on
                 // the chart.
             });
@@ -155,15 +189,15 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         });
     };
     self.getDirections = function () {
-        origin = $('.originInput').find(":selected").attr('lat')+", "+ $('.originInput').find(":selected").attr('long') ;
+        origin = $('.originInput').find(":selected").attr('lat') + ", " + $('.originInput').find(":selected").attr('long');
         console.log('origin : ', origin);
-        destination = $('.destinationInput').find(":selected").attr('lat')+", "+$('.destinationInput').find(":selected").attr('long');
+        destination = $('.destinationInput').find(":selected").attr('lat') + ", " + $('.destinationInput').find(":selected").attr('long');
         console.log('destination : ', destination);
         self.displayDirections();
     };
 
 // Google Directions Service Route
-   self.displayDirections =  function () {
+    self.displayDirections = function () {
         var directionsService = new google.maps.DirectionsService;
 
         directionsService.route({
@@ -226,7 +260,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
 
 
     };
-    self.addMarkers = function() {
+    self.addMarkers = function () {
         var marker = null;
         // Markers - testing if I can add clickable markers as inputs
         for (var i = 0; i < self.onRamps.length; i++) {
@@ -348,6 +382,8 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         }, {"featureType": "poi", "elementType": "labels", "stylers": [{"visibility": "simplified"}]}]
 
     self.makeHourDivs();
+    self.create10min();
+    self.appendAccordion();
     self.applyChangeHandler();
     self.initialhttpCall.httpCall('select');
 
