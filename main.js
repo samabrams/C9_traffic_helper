@@ -82,19 +82,19 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
                     {
                         throw 'sat undefined'
                     }
-                    data_set={hour: info, sunday: (DBdata[0][entry][info]/60).toFixed(2),
+                    data_set={hour: info.substr(0,2) + ':' + info.substr(2,3), sunday: (DBdata[0][entry][info]/60).toFixed(2),
                         monday: (DBdata[1][entry][info]/60).toFixed(2), tuesday: (DBdata[2][entry][info]/60).toFixed(2),
                         wednesday: (DBdata[3][entry][info]/60).toFixed(2), thursday: (DBdata[4][entry][info]/60).toFixed(2),
                         friday: (DBdata[5][entry][info]/60).toFixed(2), saturday:(DBdata[6][entry][info]/60).toFixed(2)};
                 }
                 catch(error)
                 {
-                    data_set={hour: info, sunday: (DBdata[0][entry][info]/60).toFixed(2),
+                    data_set={hour: info.substr(0,2) + ':' + info.substr(2,3), sunday: (DBdata[0][entry][info]/60).toFixed(2),
                         monday: (DBdata[1][entry][info]/60).toFixed(2), tuesday: (DBdata[2][entry][info]/60).toFixed(2),
                         wednesday: (DBdata[3][entry][info]/60).toFixed(2), thursday: (DBdata[4][entry][info]/60).toFixed(2),
                         friday: (DBdata[5][entry][info]/60).toFixed(2)};
                 }
-
+                //console.log( info.substr(0,1) + ':' + info.substr(2,3) );
                 total_data.push(data_set);
             }
         }
@@ -116,6 +116,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
             xkey: 'hour',
             // A list of names of data record attributes that contain y-values.
             ykeys: ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'],
+            postUnits:' min',
             // Labels for the ykeys -- will be displayed when you hover over the
             // chart.
             labels: ['sunday','monday','tuesday','wednesday','thursday','friday','saturday']
