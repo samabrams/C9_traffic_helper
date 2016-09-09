@@ -33,8 +33,8 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
                 dataType: 'json',
                 data: dataObj
             }).then(function success(response) {
-                console.log(response);
-               httpSelf.callBack(response);
+
+                httpSelf.callBack(response);
             }, function error(response) {
                 console.log('ERROR ERROR ERROR', response);
             });
@@ -43,26 +43,55 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
     self.initialhttpCall = new self.httpObject(function (response) {
         var onRampInfo = response.data.data.onRamp;
         var offRampInfo = response.data.data.offRamp;
-        for (var index in onRampInfo){
-            self.onRamps.push({name: onRampInfo[index].name, id: onRampInfo[index].ID, lat: onRampInfo[index].lat, long: onRampInfo[index].long});
+        for (var index in onRampInfo) {
+            self.onRamps.push({
+                name: onRampInfo[index].name,
+                id: onRampInfo[index].ID,
+                lat: onRampInfo[index].lat,
+                long: onRampInfo[index].long
+            });
         }
         for (var index in offRampInfo) {
-            self.offRamps.push({name: offRampInfo[index].name, id: offRampInfo[index].ID, lat: offRampInfo[index].lat, long: offRampInfo[index].long});
+            self.offRamps.push({
+                name: offRampInfo[index].name,
+                id: offRampInfo[index].ID,
+                lat: offRampInfo[index].lat,
+                long: offRampInfo[index].long
+            });
         }
         self.initMap();
         self.addMarkers();
     });
+
     self.calculationCall = new self.httpObject(function (response){
         self.createGraph(response);
         console.log('calculationCall', response);
+
     });
-    // Create Hour Divs
-    self.makeHourDivs = function() {
+    // Create Hour Divs and Panel Divs for accordion
+    self.makeHourDivs = function () {
         for (var i = 0; i < 24; i++) {
             var hour = $('<div>', {id: i + 1}).text(i + 1 + ':00').addClass('hours');
-            $('div.hourGrid2').append(hour);
+            // $('div.hourGrid2').append(hour);
+
+            var panel = $('<div>', {id: i + 1, class: 'panel'});
+            $('.hourGrid2').append(hour, panel);
         }
-    };
+    }
+
+    // Creates 10 minute increment div' within panel div - required for accordion
+    self.create10min = function () {
+        for (var j = 10; j < 60; j += 10) {
+            var timeIncrement = $('<div>', {class: j}).text(j);
+            $('.panel').append(timeIncrement);
+        }
+    }
+
+    self.appendAccordion = function() {
+        $('#accordion.hourGrid2').accordion();
+    }
+
+
 // Draw Graph
 
     self.createGraph = function(DBresponse) {
@@ -79,10 +108,6 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         for (var entry in DBdata[0]){
             for (var info in DBdata[0][entry]) {
                 //check to see if any data is undefined
-                //  if it is, set to zero for now
-
-                // if (typeof DBdata[6][entry][info] === undefined)
-                // {
                 try{
                     if(DBdata[6][entry][info] === undefined)
                     {
@@ -100,47 +125,10 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
                         wednesday: (DBdata[3][entry][info]/60).toFixed(2), thursday: (DBdata[4][entry][info]/60).toFixed(2),
                         friday: (DBdata[5][entry][info]/60).toFixed(2)};
                 }
-                //}
-                // else
-                // {
-                //     data_set={hour: info, sunday: DBdata[0][entry][info],
-                //         monday: DBdata[1][entry][info], tuesday: DBdata[2][entry][info],
-                //         wednesday: DBdata[3][entry][info], thursday: DBdata[4][entry][info],
-                //         friday: DBdata[5][entry][info], saturday: DBdata[6][entry][info]};
-                // }
 
                 total_data.push(data_set);
             }
         }
-
-        // for (var i in DBdata){
-        //     for (var j in DBdata[i]){
-        //         console.log(j + ' ' + DBdata[i][j]);
-        //     }
-        // }
-
-
-        // for (i = 0; i < 2400; i+=10) {
-        //     // time = null;
-        //     // time_string = i.toString();
-        //     //
-        //     // if (time_string.length == 1) {
-        //     //     time = "000" + time_string;
-        //     // }
-        //     // else if (time_string.length == 2) {
-        //     //     time = "00" + time_string;
-        //     // }
-        //     // else if (time_string.length == 3) {
-        //     //     time = "0" + time_string;
-        //     // }
-        //     // else {
-        //     //     time = time_string;
-        //     // }
-        //     data_set={hour: time, sunday: dummyData.sunday[time], monday: dummyData.monday[time],
-        //         tuesday: dummyData.tuesday[time], wednesday: dummyData.wednesday[time],
-        //         thursday: dummyData.thursday[time],  friday: dummyData.friday[time], saturday: dummyData.saturday[time]};
-        //     total_data.push(data_set);
-        // }
 
         //pass array total_data to Morris for graph creation
         new Morris.Line({
@@ -179,15 +167,15 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         });
     };
     self.getDirections = function () {
-        origin = $('.originInput').find(":selected").attr('lat')+", "+ $('.originInput').find(":selected").attr('long') ;
+        origin = $('.originInput').find(":selected").attr('lat') + ", " + $('.originInput').find(":selected").attr('long');
         console.log('origin : ', origin);
-        destination = $('.destinationInput').find(":selected").attr('lat')+", "+$('.destinationInput').find(":selected").attr('long');
+        destination = $('.destinationInput').find(":selected").attr('lat') + ", " + $('.destinationInput').find(":selected").attr('long');
         console.log('destination : ', destination);
         self.displayDirections();
     };
 
 // Google Directions Service Route
-   self.displayDirections =  function () {
+    self.displayDirections = function () {
         var directionsService = new google.maps.DirectionsService;
 
         directionsService.route({
@@ -250,7 +238,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
 
 
     };
-    self.addMarkers = function() {
+    self.addMarkers = function () {
         var marker = null;
         // Markers - testing if I can add clickable markers as inputs
         for (var i = 0; i < self.onRamps.length; i++) {
@@ -372,6 +360,8 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         }, {"featureType": "poi", "elementType": "labels", "stylers": [{"visibility": "simplified"}]}]
 
     self.makeHourDivs();
+    self.create10min();
+    self.appendAccordion();
     self.applyChangeHandler();
     self.initialhttpCall.httpCall('select');
 

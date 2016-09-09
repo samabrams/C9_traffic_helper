@@ -42,6 +42,7 @@ body {
     width: 20vw;
     display: inline-block;
     float:right;
+    overflow: auto;
 }
 
 .titleBar {
@@ -57,6 +58,13 @@ body {
     height: 4.17vh;
     line-height: 4.17vh;
     padding: 0 10px;
+    /*border-radius: 2px;*/
+    /*background: #f6f6f6;*/
+    /*border: 1px solid #c5c5c5;*/
+    color: #7e7e7e;
+    font-size: 1em;
+    /*line-height: 1em;*/
+    /*padding: 5px 5px;*/
 }
 
 .hours:nth-child(even){
@@ -67,6 +75,22 @@ body {
     background: #ffffff;
 }
 
+.panel {
+    font-size: 1em;
+    line-height: 1em;
+    /*padding: 5px 5px;*/
+    padding: 0 10px;
+
+    color: #7e7e7e;
+}
+
+/*.ui-state-active {*/
+    /*border: 1px solid #003eff;*/
+    /*background: #007fff;*/
+    /*font-weight: normal;*/
+    /*color: #ffffff;*/
+/*}*/
+
 #map, #graph {
     height:47vh;
     width:80vw;
@@ -74,6 +98,10 @@ body {
     /*background-color: #4cae4c;*/
     /*background-image: url(images/mapPlaceholder.png);*/
     float: left;
+}
+
+.mapFull{
+    height: 100vh;
 }
 
 #graph .morris-hover {
