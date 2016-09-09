@@ -66,18 +66,20 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
     self.calculationCall = new self.httpObject(function (response){
         self.createGraph(response);
         console.log('calculationCall', response);
+        var chosenDayData = response.data.data[$('.day').val() - 1];
+        console.log(chosenDayData);
 
     });
     // Create Hour Divs and Panel Divs for accordion
     self.makeHourDivs = function () {
         for (var i = 0; i < 24; i++) {
-            var hour = $('<div>', {id: i + 1}).text(i + 1 + ':00').addClass('hours');
+            var hour = $('<div>', {id: i + 1}).text(i + ':00').addClass('hours');
             // $('div.hourGrid2').append(hour);
 
             var panel = $('<div>', {id: i + 1, class: 'panel'});
             $('.hourGrid2').append(hour, panel);
         }
-    }
+    };
 
     // Creates 10 minute increment div' within panel div - required for accordion
     self.create10min = function () {
@@ -85,11 +87,11 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
             var timeIncrement = $('<div>', {class: j}).text(j);
             $('.panel').append(timeIncrement);
         }
-    }
+    };
 
     self.appendAccordion = function() {
         $('#accordion.hourGrid2').accordion();
-    }
+    };
 
 
 // Draw Graph
