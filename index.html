@@ -18,6 +18,8 @@
     <title>Traffic</title>
 </head>
 <body ng-app="traffic" ng-controller="trafficController as tc">
+<div class="loadingDiv" ng-show="tc.loading"></div>
+<img id="spinner" src="images/balls.gif" ng-show="tc.loading">
 <div class="wrapper">
     <div id="accordion" class="hourGrid2">
     </div>
