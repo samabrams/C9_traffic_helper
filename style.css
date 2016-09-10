@@ -61,7 +61,7 @@ body {
     /*border-radius: 2px;*/
     /*background: #f6f6f6;*/
     /*border: 1px solid #c5c5c5;*/
-    color: #7e7e7e;
+    color: rgba(0,0,0, 0.75);
     font-size: 1em;
     /*line-height: 1em;*/
     /*padding: 5px 5px;*/
@@ -131,4 +131,26 @@ input {
     width:16vw;
     border:none;
     border-bottom:1px solid #757575;
+}
+.panel {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+.ui-accordion-header:focus {
+    outline: 0;
+}
+#spinner {
+    position: absolute;
+    display: inline;
+    top: 50vh;
+    left: 85vw;
+    margin: 0;
+    transform: translateY(-50%);
+}
+.loadingDiv {
+    position: absolute;
+    width: 20vw;
+    height: 100vh;
+    top: 0;
+    right: 0;
+    background-color: white;
 }
