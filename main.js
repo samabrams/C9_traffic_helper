@@ -1,9 +1,12 @@
 var origin = '';
 var destination = '';
 var durationText = '';
-var onRampNames = [];
-var offRampNames = [];
-
+var latLongs = {'S. LUIS REY': {lat: 33.405157,lng:-117.598075},
+                'MAGDALENA': {lat: 33.413656,lng: -117.602388},
+                'EL CAMINO REAL': {lat: 33.420511,lng: -117.606481},
+                'PRESIDIO': {lat: 33.428817,lng: -117.611856},
+                'PICO 2': {lat: 33.440004,lng: -117.624274}
+};
 
 var app = angular.module('traffic', []);
 app.config(function ($httpProvider) {
@@ -15,6 +18,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
     self.colors = ['rgba(0,128,255,0.2)', 'rgba(0, 51, 102, 0.2)', 'rgba(0, 204, 204, 0.2)', 'rgba(255, 0, 0, 0.2)', 'rgba(0, 204, 0, 0.2)', 'rgba(204, 0, 204, 0.2)', 'rgba(255, 128, 0, 0.2)'],
     self.onRamps = [];
     self.offRamps = [];
+    self.markers = [];
     self.httpObject = function (callBack) {
         var httpSelf = this;
         httpSelf.callBack = callBack.bind(httpSelf);
@@ -218,10 +222,18 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         });
     };
     self.getDirections = function () {
-        origin = $('.originInput').find(":selected").attr('lat') + ", " + $('.originInput').find(":selected").attr('long');
-        console.log('origin : ', origin);
-        destination = $('.destinationInput').find(":selected").attr('lat') + ", " + $('.destinationInput').find(":selected").attr('long');
-        console.log('destination : ', destination);
+        var originID = $('.originInput').find(":selected").attr('id');
+        var originLat = latLongs[originID].lat;
+        var originLng = latLongs[originID].lng;
+        var destinationID = $('.destinationInput').find(":selected").attr('id');
+        var destinationLat = latLongs[destinationID].lat;
+        var destinationLng = latLongs[destinationID].lng;
+        origin = originLat+", "+originLng;
+        destination = destinationLat+", "+destinationLng;
+        // origin = $('.originInput').find(":selected").attr('lat') + ", " + $('.originInput').find(":selected").attr('long');
+        // console.log('origin : ', origin);
+        // destination = $('.destinationInput').find(":selected").attr('lat') + ", " + $('.destinationInput').find(":selected").attr('long');
+        // console.log('destination : ', destination);
         self.displayDirections();
     };
 
@@ -287,35 +299,51 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
 
 
     };
-    self.addMarkers = function () {
-        var marker = null;
+    self.addMarkers = function() {
         // Markers - testing if I can add clickable markers as inputs
-        for (var i = 0; i < self.onRamps.length; i++) {
-            var position = {lat: parseFloat(self.onRamps[i].lat), lng: parseFloat(self.onRamps[i].long)};
+        for (var index in latLongs) {
+            var markerObj = {};
+            var position = {lat: parseFloat(latLongs[index].lat), lng: parseFloat(latLongs[index].lng)};
             console.log(position);
-            marker = new google.maps.Marker({
+            markerObj.marker = new google.maps.Marker({
                 position: position,
                 map: map,
-                title: self.onRamps[i].name,
+                title: index,
                 icon: 'images/mark.png'
             });
-
-            marker.addListener('click', function () {
-                map.setZoom(12);
-                map.setCenter(this.getPosition());
-                console.log('after clicking marker, the marker.getPosition is : ', this.getPosition());
-                var infoWindow = new google.maps.InfoWindow({
-                    content: this.title
-                });
-                infoWindow.open(map, this);
+            markerObj.infoWindow = new google.maps.InfoWindow({
+                content: markerObj.marker.title
             });
-            // marker.addListener('mouseover', function () {
-            //     var infoWindow = new google.maps.InfoWindow({
-            //         content: this.title
-            //     });
-            //     infoWindow.open(map, this);
-            // });
+
+            self.markers.push(markerObj);
+            console.log('markers inner: ', self.markers);
         }
+        console.log('markers: ', self.markers);
+       self.markers.forEach(function(value){
+            var markObj = value;
+            console.log('markObj: ',markObj);
+            markObj.marker.addListener('click', function () {
+                if (!self.originClicked){
+                    origin = this.getPosition();
+                    console.log('origin after marker click: ', origin);
+                    self.originClicked = true;
+                }
+                else {
+                    destination = this.getPosition();
+                    if (origin != destination){
+                        self.displayDirections();
+                        self.originClicked = false;
+                    }
+                }
+            });
+            markObj.marker.addListener('mouseover', function () {
+                markObj.infoWindow.open(map, this);
+            });
+            markObj.marker.addListener('mouseout', function(){
+                    markObj.infoWindow.close();
+            })
+
+        });
     };
 
 // // Adds the traffic layer
