@@ -8,14 +8,22 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
     <script src="main.js"></script>
     <script src="ajaxToServer.js"></script>
     <title>Traffic</title>
 </head>
 <body ng-app="traffic" ng-controller="trafficController as tc">
+<div class="loadingDiv" ng-show="tc.loading"></div>
+<img id="spinner" src="images/balls.gif" ng-show="tc.loading">
 <div class="wrapper">
-    <div class="hourGrid1">
-        <div class="logo">App Name</div>
+    <div id="accordion" class="hourGrid2">
+    </div>
+    <div class="titleBar">
+        <div class="logo">Truck Route</div>
 
         <h4>Origin</h4>
         <select class="originInput" ng-init="originChoice = 'unselected'" ng-model="originChoice">
@@ -39,12 +47,10 @@
         </select>
 
     </div>
-    <div class="hourGrid2">
-    </div>
-    <div id="map">
+
+    <div id="map" class="mapFull">
     </div>
     <div id="graph">
-        Put the graph in here
     </div>
 </div>
 
@@ -53,3 +59,4 @@
 </script>
 </body>
 </html>
+

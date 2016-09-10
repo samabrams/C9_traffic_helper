@@ -14,7 +14,8 @@ app.config(function ($httpProvider) {
 });
 app.controller('trafficController', function ($scope, $http, $timeout) {
     var self = this;
-    self.originClicked = false;
+    self.loading = false;
+    self.colors = ['rgba(0,128,255,0.2)', 'rgba(0, 51, 102, 0.2)', 'rgba(0, 204, 204, 0.2)', 'rgba(255, 0, 0, 0.2)', 'rgba(0, 204, 0, 0.2)', 'rgba(204, 0, 204, 0.2)', 'rgba(255, 128, 0, 0.2)'],
     self.onRamps = [];
     self.offRamps = [];
     self.markers = [];
@@ -24,14 +25,12 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
 
 
         httpSelf.httpCall = function (command) {
+            self.loading = true;
             this.command = command;
             var dataObj = $.param({
                 origin: $('.originInput').val(),
                 destination: $('.destinationInput').val(),
-                date: $('.dateInput').val(),
-                // startKey: $().attr(), //todo: elementName to get startKey
-                // endKey: $().attr(), //todo: elementName to get endKey
-                // dateKey: $().attr(), //todo: elementName to get date
+                date: $('.day').val(),
                 command: this.command
             });
 
@@ -41,7 +40,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
                 dataType: 'json',
                 data: dataObj
             }).then(function success(response) {
-               httpSelf.callBack(response);
+                httpSelf.callBack(response);
             }, function error(response) {
                 console.log('ERROR ERROR ERROR', response);
             });
@@ -50,26 +49,166 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
     self.initialhttpCall = new self.httpObject(function (response) {
         var onRampInfo = response.data.data.onRamp;
         var offRampInfo = response.data.data.offRamp;
-        for (var index in onRampInfo){
-            self.onRamps.push({name: onRampInfo[index].name, id: onRampInfo[index].ID, lat: onRampInfo[index].lat, long: onRampInfo[index].long});
+        for (var index in onRampInfo) {
+            self.onRamps.push({
+                name: onRampInfo[index].name,
+                id: onRampInfo[index].ID,
+                lat: onRampInfo[index].lat,
+                long: onRampInfo[index].long
+            });
         }
         for (var index in offRampInfo) {
-            self.offRamps.push({name: offRampInfo[index].name, id: offRampInfo[index].ID, lat: offRampInfo[index].lat, long: offRampInfo[index].long});
+            self.offRamps.push({
+                name: offRampInfo[index].name,
+                id: offRampInfo[index].ID,
+                lat: offRampInfo[index].lat,
+                long: offRampInfo[index].long
+            });
         }
         self.initMap();
         self.addMarkers();
+        self.loading = false;
     });
-    self.calculationCall = new self.httpObject(function (response){
-        console.log(response);
+
+    self.calculationCall = new self.httpObject(function (response) {
+        self.createGraph(response);
+        console.log('calculationCall', response);
+        var chosenDayData = response.data.data[$('.day').val() - 1];
+        console.log('first time for chosen day: ', chosenDayData[0]);
+        self.populateHourDivs(chosenDayData);
+        self.loading = false;
     });
-    // Create Hour Divs
-    self.makeHourDivs = function() {
+    self.populateHourDivs = function (chosenDayData) {
+        var dayColor = self.colors[$('.day').val() - 1];
+        for (var i = 0; i < 144; i += 6) {
+            var hourDivID = i / 6;
+            var hourDiv = $('#' + hourDivID);
+            hourDiv.css('background-color', dayColor);
+            var hourDivIDText = hourDiv.text();
+            var stopIndex = hourDivIDText.indexOf(':00');
+            hourDivIDText = hourDivIDText.substr(0, stopIndex + 3);
+            var hourData = Math.round(chosenDayData[i][Object.keys(chosenDayData[i])[0]] / 60);
+            hourDivIDText += " | " + hourData;
+            if (hourData > 1) {
+                hourDivIDText += " minutes";
+            }
+            else {
+                hourDivIDText += " minute";
+            }
+            hourDiv.text(hourDivIDText);
+            for (var j = 10; j < 60; j += 10) {
+                var dataIndex = i + j / 10;
+                var subDiv = $('#' + hourDivID + '.ui-accordion-content .' + j);
+                var subDivText = subDiv.text();
+                var subDivStopIndex = subDivText.indexOf(0);
+                subDivText = subDivText.substr(0, subDivStopIndex + 1);
+                var tenMinuteData = Math.round(chosenDayData[dataIndex][Object.keys(chosenDayData[dataIndex])[0]] / 60);
+                subDivText += " | " + tenMinuteData;
+                if (tenMinuteData > 1) {
+                    subDivText += " minutes";
+                }
+                else {
+                    subDivText += " minute";
+                }
+                subDiv.text(subDivText);
+            }
+        }
+    };
+    // Create Hour Divs and Panel Divs for accordion
+    self.makeHourDivs = function () {
         for (var i = 0; i < 24; i++) {
-            var hour = $('<div>', {id: i + 1}).text(i + 1 + ':00').addClass('hours');
-            $('div.hourGrid2').append(hour);
+            var hour = $('<div>', {id: i}).text(i + ':00 ').addClass('hours');
+            // $('div.hourGrid2').append(hour);
+
+            var panel = $('<div>', {id: i, class: 'panel'});
+            $('.hourGrid2').append(hour, panel);
         }
     };
 
+    // Creates 10 minute increment div' within panel div - required for accordion
+    self.create10min = function () {
+        for (var j = 10; j < 60; j += 10) {
+            var timeIncrement = $('<div>', {class: j}).text(":"+j);
+            $('.panel').append(timeIncrement);
+        }
+    };
+
+    self.appendAccordion = function () {
+        $('#accordion.hourGrid2').accordion();
+    };
+
+
+// Draw Graph
+
+    self.createGraph = function (DBresponse) {
+        //remove previous graph
+        $('#graph').empty();
+
+        var DBdata = DBresponse.data.data;
+        console.log(DBdata);
+
+        //populatedData.done(function(){
+        //use data from DB to create array
+        var total_data = [];
+
+        for (var entry in DBdata[0]) {
+            for (var info in DBdata[0][entry]) {
+                //check to see if any data is undefined
+                try {
+                    if (DBdata[6][entry][info] === undefined) {
+                        throw 'sat undefined'
+                    }
+                    data_set = {
+                        hour: info,
+                        sunday: (DBdata[0][entry][info] / 60).toFixed(2),
+                        monday: (DBdata[1][entry][info] / 60).toFixed(2),
+                        tuesday: (DBdata[2][entry][info] / 60).toFixed(2),
+                        wednesday: (DBdata[3][entry][info] / 60).toFixed(2),
+                        thursday: (DBdata[4][entry][info] / 60).toFixed(2),
+                        friday: (DBdata[5][entry][info] / 60).toFixed(2),
+                        saturday: (DBdata[6][entry][info] / 60).toFixed(2)
+                    };
+                }
+                catch (error) {
+                    data_set = {
+                        hour: info,
+                        sunday: (DBdata[0][entry][info] / 60).toFixed(2),
+                        monday: (DBdata[1][entry][info] / 60).toFixed(2),
+                        tuesday: (DBdata[2][entry][info] / 60).toFixed(2),
+                        wednesday: (DBdata[3][entry][info] / 60).toFixed(2),
+                        thursday: (DBdata[4][entry][info] / 60).toFixed(2),
+                        friday: (DBdata[5][entry][info] / 60).toFixed(2)
+                    };
+                }
+
+                total_data.push(data_set);
+            }
+        }
+
+        //pass array total_data to Morris for graph creation
+        new Morris.Line({
+            // ID of the element in which to draw the chart.
+            element: 'graph',
+            // Chart data records -- each entry in this array corresponds to a point on
+            // the chart.
+            resize: true,
+
+            parseTime: false,
+
+            data: total_data,
+            lineColors: ['rgba(0,128,255,1)', 'rgba(0, 51, 102, 1)', 'rgba(0, 204, 204, 1)', 'rgba(255, 0, 0, 1)', 'rgba(0, 204, 0, 1)', 'rgba(204, 0, 204, 1)', 'rgba(255, 128, 0, 1)'],
+
+            // The name of the data record attribute that contains x-values.
+            xkey: 'hour',
+            // A list of names of data record attributes that contain y-values.
+            ykeys: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
+            // Labels for the ykeys -- will be displayed when you hover over the
+            // chart.
+            labels: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+            // Chart data records -- each entry in this array corresponds to a point on
+            // the chart.
+        });
+    };
 // Inputs and Button
     self.applyChangeHandler = function () {
         $('select').change(function () {
@@ -91,11 +230,15 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         var destinationLng = latLongs[destinationID].lng;
         origin = originLat+", "+originLng;
         destination = destinationLat+", "+destinationLng;
+        // origin = $('.originInput').find(":selected").attr('lat') + ", " + $('.originInput').find(":selected").attr('long');
+        // console.log('origin : ', origin);
+        // destination = $('.destinationInput').find(":selected").attr('lat') + ", " + $('.destinationInput').find(":selected").attr('long');
+        // console.log('destination : ', destination);
         self.displayDirections();
     };
 
 // Google Directions Service Route
-   self.displayDirections =  function () {
+    self.displayDirections = function () {
         var directionsService = new google.maps.DirectionsService;
 
         directionsService.route({
@@ -129,8 +272,6 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
             console.log('response : ', response);
             console.log('response.routes.. is : ', response.routes[0].legs[0].duration.text);
             durationText = response.routes[0].legs[0].duration.text;
-            $('#7').append('  Duration : ' + durationText);
-            $('#7').css('background-color', 'red');
             console.log('directionsDisplay is: ', directionsDisplay);
             directionsDisplayed = true;
         });
@@ -142,7 +283,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
     var map;
     self.initMap = function () {
         map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 11,
+            zoom: 13,
             center: {lat: 33.4288, lng: -117.612},
 
             styles: self.styles
@@ -296,6 +437,8 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
         }, {"featureType": "poi", "elementType": "labels", "stylers": [{"visibility": "simplified"}]}]
 
     self.makeHourDivs();
+    self.create10min();
+    self.appendAccordion();
     self.applyChangeHandler();
     self.initialhttpCall.httpCall('select');
 

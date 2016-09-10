@@ -1,10 +1,12 @@
 
 select {
-    width: 95%;
+    width: 15%;
     background-color: rgba(255, 255, 255, .85);
     border: 1px solid rgba(255, 255, 255, 0.6);
     border-radius: 1px;
     box-shadow: 0 2px 4px rgba(255, 255, 255, 0.3);
+    display: inline-block;
+    margin: 0 0.5vw;
 
 }
 select option {
@@ -18,8 +20,9 @@ select:focus {
 h4 {
     color: rgba(255, 255, 255, 1);
     font-weight: 300;
-    margin: 5px 0;
+    margin-left: 1.5vw;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    display: inline-block;
 }
 
 body {
@@ -34,27 +37,34 @@ body {
     box-sizing:border-box;
 }
 
-.hourGrid1, .hourGrid2 {
+.hourGrid2 {
     height:100vh;
     width: 20vw;
     display: inline-block;
-    float:left;
+    float:right;
+    overflow: auto;
 }
 
-.hourGrid1 {
+.titleBar {
+    width: 80vw;
+    height: 6vh;
+    min-height: 55px;
     background-color: #292929;
-    padding: 1vw;
+    padding: 0 1vw;
     box-sizing: border-box;
-}
-
-.hourGrid2{
-    /*background-color: #0fb8ad;*/
 }
 
 .hours {
     height: 4.17vh;
     line-height: 4.17vh;
     padding: 0 10px;
+    /*border-radius: 2px;*/
+    /*background: #f6f6f6;*/
+    /*border: 1px solid #c5c5c5;*/
+    color: rgba(0,0,0, 0.75);
+    font-size: 1em;
+    /*line-height: 1em;*/
+    /*padding: 5px 5px;*/
 }
 
 .hours:nth-child(even){
@@ -65,28 +75,53 @@ body {
     background: #ffffff;
 }
 
-#map {
-    height:50vh;
-    width:60vw;
+.panel {
+    font-size: 1em;
+    line-height: 1em;
+    /*padding: 5px 5px;*/
+    padding: 0 10px;
+
+    color: #7e7e7e;
+}
+
+/*.ui-state-active {*/
+    /*border: 1px solid #003eff;*/
+    /*background: #007fff;*/
+    /*font-weight: normal;*/
+    /*color: #ffffff;*/
+/*}*/
+
+#map, #graph {
+    height:47vh;
+    width:80vw;
     display: inline-block;
     /*background-color: #4cae4c;*/
     /*background-image: url(images/mapPlaceholder.png);*/
     float: left;
 }
 
-#graph {
-    height:50vh;
-    width:60vw;
-    display: inline-block;
-    /*background-color: #4cae4c;*/
-    /*background-image: url(images/mapPlaceholder.png);*/
-    float: left;
+.mapFull{
+    height: 100vh;
+}
+
+#graph .morris-hover {
+    float:none;
+    position: absolute;
+    text-align: left;
+    padding: 14px;
+    z-index:100;
+    background-color: rgba(255,255,255,0.8);
+    /*border: 2px solid #f0e4d3;*/
+    border-radius: 10px;
 }
 
 .logo {
-    margin: 1vh 0;
+    /*margin: 1vh 0;*/
     font-size: 2em;
     color: #ffffff;
+    display: inline-block;
+    line-height: 55px;
+
 }
 
 input {
@@ -96,4 +131,26 @@ input {
     width:16vw;
     border:none;
     border-bottom:1px solid #757575;
+}
+.panel {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+.ui-accordion-header:focus {
+    outline: 0;
+}
+#spinner {
+    position: absolute;
+    display: inline;
+    top: 50vh;
+    left: 85vw;
+    margin: 0;
+    transform: translateY(-50%);
+}
+.loadingDiv {
+    position: absolute;
+    width: 20vw;
+    height: 100vh;
+    top: 0;
+    right: 0;
+    background-color: white;
 }
