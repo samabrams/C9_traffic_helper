@@ -1,12 +1,13 @@
 var origin = '';
 var destination = '';
 var durationText = '';
-var latLongs = {'S. LUIS REY': {lat: 33.405157,lng:-117.598075},
-                'MAGDALENA': {lat: 33.413656,lng: -117.602388},
-                'EL CAMINO REAL': {lat: 33.420511,lng: -117.606481},
-                'PRESIDIO': {lat: 33.428817,lng: -117.611856},
-                'PICO 2': {lat: 33.440004,lng: -117.624274}
+var latLongs = {'S. LUIS REY': {lat: 33.405157,lng:-117.598075, id: 1},
+                'MAGDALENA': {lat: 33.413656,lng: -117.602388, id: 2},
+                'EL CAMINO REAL': {lat: 33.420511,lng: -117.606481, id: 3},
+                'PRESIDIO': {lat: 33.428817,lng: -117.611856, id: 4},
+                'PICO 2': {lat: 33.440004,lng: -117.624274, id: 5}
 };
+
 
 var app = angular.module('traffic', []);
 app.config(function ($httpProvider) {
@@ -14,7 +15,9 @@ app.config(function ($httpProvider) {
 });
 app.controller('trafficController', function ($scope, $http, $timeout) {
     var self = this;
+    self.directionsDisplay = null;
     self.loading = false;
+    self.routeDisplayed = false;
     self.colors = ['rgba(0,128,255,0.2)', 'rgba(0, 51, 102, 0.2)', 'rgba(0, 204, 204, 0.2)', 'rgba(255, 0, 0, 0.2)', 'rgba(0, 204, 0, 0.2)', 'rgba(204, 0, 204, 0.2)', 'rgba(255, 128, 0, 0.2)'],
     self.onRamps = [];
     self.offRamps = [];
@@ -239,6 +242,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
 
 // Google Directions Service Route
     self.displayDirections = function () {
+        if (self.routeDisplayed) self.directionsDisplay.setMap(null);
         var directionsService = new google.maps.DirectionsService;
 
         directionsService.route({
@@ -255,11 +259,11 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
             if (status === 'OK') {
 
                 for (var i = 0, len = response.routes.length; i < len; i++) {
-                    var directionsDisplay = new google.maps.DirectionsRenderer({
+                    self.directionsDisplay = new google.maps.DirectionsRenderer({
                         map: map,
                         directions: response,
                         routeIndex: i,
-                        draggable: true,
+                        draggable: true
                         // polylineOptions: {
                         //     strokeColor: 'red'
                         // }
@@ -272,8 +276,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
             console.log('response : ', response);
             console.log('response.routes.. is : ', response.routes[0].legs[0].duration.text);
             durationText = response.routes[0].legs[0].duration.text;
-            console.log('directionsDisplay is: ', directionsDisplay);
-            directionsDisplayed = true;
+            self.routeDisplayed = true;
         });
 
         console.log(directionsService);
@@ -283,7 +286,7 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
     var map;
     self.initMap = function () {
         map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 13,
+            zoom: 11,
             center: {lat: 33.4288, lng: -117.612},
 
             styles: self.styles
@@ -323,15 +326,16 @@ app.controller('trafficController', function ($scope, $http, $timeout) {
             var markObj = value;
             console.log('markObj: ',markObj);
             markObj.marker.addListener('click', function () {
-                if (!self.originClicked){
+                if (!self.originClicked && self.routeDisplayed){
                     origin = this.getPosition();
-                    console.log('origin after marker click: ', origin);
+                    console.log('origin after marker click: ', $('.originInput').val());
                     self.originClicked = true;
                 }
-                else {
+                else if (self.routeDisplayed){
                     destination = this.getPosition();
                     if (origin != destination){
                         self.displayDirections();
+                        self.calculationCall.httpCall('getCalc');
                         self.originClicked = false;
                     }
                 }
