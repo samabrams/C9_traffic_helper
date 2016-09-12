@@ -28,12 +28,12 @@
         <h4>Origin</h4>
         <select class="originInput" ng-init="originChoice = 'unselected'" ng-model="originChoice">
             <option value="unselected"></option>
-            <option ng-repeat="on in tc.onRamps" id="{{on.name}}" lat="{{on.lat}}" long="{{on.long}}" value="{{on.id}}" ng-hide="destinationChoice == on.id">{{on.name}}</option>
+            <option ng-repeat="on in tc.onRamps" id="{{on.name}}" lat="{{on.lat}}" long="{{on.long}}" value="{{on.id}}" ng-hide="destinationChoice <= on.id">{{on.name}}</option>
         </select>
         <h4>Destination</h4>
         <select class="destinationInput" ng-init="destinationChoice = 'unselected'" ng-model="destinationChoice">
             <option value="unselected"></option>
-            <option ng-repeat="off in tc.offRamps" id="{{off.name}}" lat="{{off.lat}}" long="{{off.long}} "value="{{off.id}}" ng-hide="originChoice == off.id">{{off.name}}</option>
+            <option ng-repeat="off in tc.offRamps" id="{{off.name}}" lat="{{off.lat}}" long="{{off.long}} "value="{{off.id}}" ng-hide="originChoice >= off.id">{{off.name}}</option>
         </select>
         <h4>Day</h4>
         <select class="day">
