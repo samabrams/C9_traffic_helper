@@ -33,17 +33,16 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
         //curl_setopt($ch, CURLOPT_URL, "http://pems.dot.ca.gov/?report_form=1&dnode=VDS&content=loops&tab=det_timeseries&export=text&station_id=1204198&s_time_id=1473206400&s_time_id_f=09%2F07%2F2016+00%3A00&e_time_id=1473278340&e_time_id_f=09%2F07%2F2016+19%3A59&tod=all&tod_from=0&tod_to=0&dow_0=on&dow_1=on&dow_2=on&dow_3=on&dow_4=on&dow_5=on&dow_6=on&holidays=on&q=q&q2=&gn=5min&agg=on&lane1=on&lane2=on&lane3=on&lane4=on");
 
-        $startTime = 1473206400; //do not change - will always be 00:00
-        $endTime = 1473292740;   //do not change - will always be 23:59
-
         //todo: needs to be synced with crontab on apache server
+        $startTime = 1473206400; //do not change - will always be 00:00
         $startDate = date('m-d-Y', strtotime('-1 week'));
         $startDate = str_replace("-", "%2F", $startDate);
 
+        $endTime = 1473292740;   //do not change - will always be 23:59
         $endDate = date('m-d-Y', strtotime('-13 days'));
         $endDate = str_replace("-", "%2F", $endDate);
 
-        $exportType = 'text';
+        $exportType = 'text'; //or xls file
         
         $templateURL = "http://pems.dot.ca.gov/?report_form=1&dnode=VDS&content=loops&tab=det_timeseries&export={$exportType}&station_id={$stationID}&s_time_id={$startTime}&s_time_id_f={$startDate}+00%3A00&e_time_id={$endTime}&e_time_id_f={$endDate}%3A59&tod=all&tod_from=0&tod_to=0&dow_0=on&dow_1=on&dow_2=on&dow_3=on&dow_4=on&dow_5=on&dow_6=on&holidays=on&q=q&q2=&gn=5min&agg=on&lane1=on&lane2=on&lane3=on&lane4=on";
 

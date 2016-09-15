@@ -38,9 +38,9 @@
         1216545,1205680,1205673,1205678
     ];
 
-    for ($i = 0; $i < count($sectionIDs); $i++) {
-        
-        fetch_data($pems_username, $pems_password, $sectionIDs[$i]);
-        
-    }
+//    for ($i = 0; $i < count($sectionIDs); $i++) {
+//        fetch_data($pems_username, $pems_password, $sectionIDs[$i]);
+//    }
+
+fetch_data($pems_username, $pems_password, 1209764);
 ?>
